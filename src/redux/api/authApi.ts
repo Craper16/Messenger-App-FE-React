@@ -1,9 +1,6 @@
-import {
-  createApi,
-  fetchBaseQuery,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/query/react';
-import { AuthModel } from '../auth/authSlice';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { AuthModel, UserInfo } from '../auth/authSlice';
+import { setHeaders } from '../../helpers/setHeaders';
 
 export interface credentials {
   email: string;
@@ -21,7 +18,10 @@ export interface AuthErrorResponse {
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_KEY }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_KEY,
+    prepareHeaders: (headers) => setHeaders(headers),
+  }),
   endpoints: (builder) => ({
     signInUser: builder.mutation<AuthModel, credentials>({
       query: (body) => ({
@@ -46,6 +46,11 @@ export const authApi = createApi({
         url: '/auth/refresh',
         method: 'POST',
         body,
+      }),
+    }),
+    getUserData: builder.query<UserInfo, void>({
+      query: () => ({
+        url: '/me',
       }),
     }),
   }),
