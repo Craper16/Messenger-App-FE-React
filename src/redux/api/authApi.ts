@@ -10,6 +10,11 @@ export interface credentials {
   password: string;
 }
 
+export interface signUpInfo extends credentials {
+  displayName: string;
+  phoneNumber: number;
+}
+
 export interface AuthErrorResponse {
   data: { data: { message: string; status: string } };
 }
@@ -27,7 +32,27 @@ export const authApi = createApi({
       transformErrorResponse: (response) =>
         (response as AuthErrorResponse).data.data,
     }),
+    signUpUser: builder.mutation<AuthModel, signUpInfo>({
+      query: (body) => ({
+        url: '/auth/signup',
+        method: 'POST',
+        body,
+      }),
+      transformErrorResponse: (response) =>
+        (response as AuthErrorResponse).data.data,
+    }),
+    refreshTokens: builder.mutation<AuthModel, { refresh_token: string }>({
+      query: (body) => ({
+        url: '/auth/refresh',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useSignInUserMutation } = authApi;
+export const {
+  useSignInUserMutation,
+  useSignUpUserMutation,
+  useRefreshTokensMutation,
+} = authApi;

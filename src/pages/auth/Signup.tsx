@@ -7,7 +7,12 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../consts/constants';
+import { useSignUpUserMutation } from '../../redux/api/authApi';
+import { setUser } from '../../redux/auth/authSlice';
+import { useAppDispatch } from '../../redux/hooks';
 import { signUpValidations } from '../../validations/auth/authValidations';
 
 interface signUpInitialValuesModel {
@@ -27,12 +32,32 @@ const SignUpInitialValues: signUpInitialValuesModel = {
 };
 
 export default function Signup() {
+  const dispatch = useAppDispatch();
+
+  const [signUpUser, { data, isError, error, isLoading, isSuccess }] =
+    useSignUpUserMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setUser({ ...data! }));
+      localStorage.setItem(ACCESS_TOKEN, data?.access_token!);
+      localStorage.setItem(REFRESH_TOKEN, data?.refresh_token!);
+    }
+  }, [isSuccess, dispatch]);
+
   return (
     <Formik
       initialValues={SignUpInitialValues}
       validateOnMount={true}
       validationSchema={signUpValidations}
-      onSubmit={(values) => console.log({ ...values })}
+      onSubmit={(values) =>
+        signUpUser({
+          email: values.email,
+          displayName: values.displayName,
+          password: values.password,
+          phoneNumber: +values.phoneNumber,
+        })
+      }
     >
       {({
         handleBlur,
@@ -114,16 +139,17 @@ export default function Signup() {
           </FormControl>
           <Button
             variant="outline"
+            isLoading={isLoading}
             disabled={!isValid}
             onClick={() => handleSubmit()}
           >
             Sign Up
           </Button>
-          {/* {isError && (
+          {isError && (
             <Text>
               {(error as { message: string; status: number })?.message}
             </Text>
-          )} */}
+          )}
           <Link
             to="/signin"
             className="text-red-800"

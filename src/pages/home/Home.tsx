@@ -1,5 +1,8 @@
 import React from 'react';
+import { useAppSelector } from '../../redux/hooks';
 
 export default function Home() {
-  return <div>Home</div>;
+  const { displayName } = useAppSelector((state) => state.auth);
+
+  return <div>{displayName}</div>;
 }

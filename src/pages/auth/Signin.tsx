@@ -77,6 +77,7 @@ export default function Signin() {
           </FormControl>
           <Button
             variant="outline"
+            isLoading={isLoading}
             disabled={isLoading || !isValid}
             onClick={() => handleSubmit()}
           >
