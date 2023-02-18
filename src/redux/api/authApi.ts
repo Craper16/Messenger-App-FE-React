@@ -60,4 +60,5 @@ export const {
   useSignInUserMutation,
   useSignUpUserMutation,
   useRefreshTokensMutation,
+  useGetUserDataQuery,
 } = authApi;
