@@ -28,7 +28,7 @@ export default function MainNavbar({ handleLogout }: MainNavbarProps) {
           {access_token ? (
             <Button
               variant={'solid'}
-              colorScheme={'purple'}
+              colorScheme={'blackAlpha'}
               size={'sm'}
               mr={4}
               leftIcon={<ArrowBackIcon />}
