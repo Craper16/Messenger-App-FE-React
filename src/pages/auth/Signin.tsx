@@ -44,51 +44,49 @@ export default function Signin() {
         isValid,
         touched,
       }) => (
-        <Form className="align-bottom justify-end mr-auto w-96 h-80">
-          <Card>
-            <FormControl isInvalid={!!errors.email && touched.email}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                id="email"
-                type="text"
-                placeholder="jhon@doe.com"
-                value={values.email}
-                onChange={handleChange('email')}
-                onBlur={handleBlur('email')}
-              />
-              <FormErrorMessage>{errors.email}</FormErrorMessage>
-            </FormControl>
-            <FormControl isInvalid={!!errors.password && touched.password}>
-              <FormLabel>Password</FormLabel>
-              <Input
-                id="password"
-                type="password"
-                placeholder="password example"
-                value={values.password}
-                onChange={handleChange('password')}
-                onBlur={handleBlur('password')}
-              />
-              <FormErrorMessage>{errors.password}</FormErrorMessage>
-            </FormControl>
-            <Button
-              variant="outline"
-              disabled={isLoading || !isValid}
-              onClick={() => handleSubmit()}
-            >
-              Sign In
-            </Button>
-            {isError && (
-              <Text>
-                {(error as { message: string; status: number })?.message}
-              </Text>
-            )}
-            <Button
-              variant="link"
-              color="red"
-            >
-              New to Saad Messenger? Sign Up now!
-            </Button>
-          </Card>
+        <Form className='flex flex-col mr-auto ml-auto mt-36 w-96'>
+          <Text className='font-bold text-center text-2xl'>Sign In</Text>
+          <FormControl isInvalid={!!errors.email && touched.email}>
+            <FormLabel>Email</FormLabel>
+            <Input
+              id='email'
+              type='text'
+              placeholder='Email'
+              value={values.email}
+              onChange={handleChange('email')}
+              onBlur={handleBlur('email')}
+              textColor='#1f1f1f'
+            />
+            <FormErrorMessage>{errors.email}</FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.password && touched.password}>
+            <FormLabel>Password</FormLabel>
+            <Input
+              id='password'
+              type='password'
+              placeholder='Password'
+              value={values.password}
+              onChange={handleChange('password')}
+              onBlur={handleBlur('password')}
+              textColor='#1f1f1f'
+            />
+            <FormErrorMessage>{errors.password}</FormErrorMessage>
+          </FormControl>
+          <Button
+            variant='outline'
+            disabled={isLoading || !isValid}
+            onClick={() => handleSubmit()}
+          >
+            Sign In
+          </Button>
+          {isError && (
+            <Text>
+              {(error as { message: string; status: number })?.message}
+            </Text>
+          )}
+          <Button variant='link' color='red'>
+            New to Saad Messenger? Sign Up now!
+          </Button>
         </Form>
       )}
     </Formik>
