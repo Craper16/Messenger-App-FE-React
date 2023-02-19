@@ -16,6 +16,10 @@ export interface AuthErrorResponse {
   data: { data: { message: string; status: string } };
 }
 
+export interface ChangePasswordResponse extends UserInfo {
+  message: string;
+}
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
@@ -50,8 +54,20 @@ export const authApi = createApi({
     }),
     getUserData: builder.query<UserInfo, void>({
       query: () => ({
-        url: '/me',
+        url: '/auth/me',
       }),
+    }),
+    changeUserPassword: builder.mutation<
+      ChangePasswordResponse,
+      { oldPassword: string; newPassword: string }
+    >({
+      query: (body) => ({
+        url: '/auth/me/change-password',
+        method: 'PUT',
+        body,
+      }),
+      transformErrorResponse: (response) =>
+        (response as AuthErrorResponse).data.data,
     }),
   }),
 });
@@ -61,4 +77,5 @@ export const {
   useSignUpUserMutation,
   useRefreshTokensMutation,
   useGetUserDataQuery,
+  useChangeUserPasswordMutation,
 } = authApi;

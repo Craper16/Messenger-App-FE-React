@@ -34,3 +34,14 @@ export const signUpValidations = yup.object().shape({
     .required('Phone number is required')
     .max(8, 'Phone number must be 8 numbers'),
 });
+
+export const changePasswordValidations = yup.object().shape({
+  oldPassword: yup.string().required('Please enter your old password'),
+  newPassword: yup
+    .string()
+    .required('Please enter your new password')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/,
+      'New password must contain 8 or more characters, with 1 upper case, 1 lower case and a special character'
+    ),
+});

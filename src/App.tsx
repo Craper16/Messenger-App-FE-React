@@ -10,12 +10,20 @@ import { defaultAuth, setUser } from './redux/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import Home from './pages/home/Home';
 import Signup from './pages/auth/Signup';
-import { HOME, SIGNIN } from './consts/routeNames';
+import {
+  CHANGE_PASSWORD,
+  HOME,
+  PROFILE,
+  SIGNIN,
+  SIGNUP,
+} from './consts/routeNames';
 import { useRefreshTokensMutation } from './redux/api/authApi';
 import Error from './pages/Error';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './consts/constants';
 import { useEffect } from 'react';
 import StartupPage from './pages/StartupPage';
+import Profile from './pages/account/Profile';
+import ChangePassword from './pages/account/ChangePassword';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -65,15 +73,25 @@ function App() {
       <MainNavbar handleLogout={handleLogout} />
       <Routes>
         <Route
-          path="/"
+          path={HOME}
           element={!access_token ? <Navigate to={SIGNIN} /> : <Home />}
         />
         <Route
-          path="/signin"
+          path={PROFILE}
+          element={!access_token ? <Navigate to={SIGNIN} /> : <Profile />}
+        />
+        <Route
+          path={CHANGE_PASSWORD}
+          element={
+            !access_token ? <Navigate to={SIGNIN} /> : <ChangePassword />
+          }
+        />
+        <Route
+          path={SIGNIN}
           element={access_token ? <Navigate to={HOME} /> : <Signin />}
         />
         <Route
-          path="/signup"
+          path={SIGNUP}
           element={access_token ? <Navigate to={HOME} /> : <Signup />}
         />
         <Route
