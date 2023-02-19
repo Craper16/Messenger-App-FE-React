@@ -29,8 +29,10 @@ function App() {
   const dispatch = useAppDispatch();
   const access_token = useAppSelector((state) => !!state.auth.access_token);
 
-  const [refreshTokens, { data, isLoading, isSuccess }] =
-    useRefreshTokensMutation();
+  const [
+    refreshTokens,
+    { data, isLoading, isSuccess, isError, error, originalArgs },
+  ] = useRefreshTokensMutation();
 
   function handleLogout() {
     dispatch(defaultAuth());
@@ -43,7 +45,6 @@ function App() {
     if (refresh_token) {
       return await refreshTokens({ refresh_token });
     }
-    return;
   }
 
   async function storeDataIfAutoLoginSuccess() {
@@ -61,8 +62,10 @@ function App() {
   useEffect(() => {
     if (isSuccess) {
       storeDataIfAutoLoginSuccess();
+    } else if (isError) {
+      handleLogout();
     }
-  }, [isSuccess]);
+  }, [isSuccess, isError]);
 
   if (isLoading) {
     return <StartupPage />;
