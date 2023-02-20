@@ -19,12 +19,12 @@ import {
 } from './consts/routeNames';
 import { useRefreshTokensMutation } from './redux/api/authApi';
 import Error from './pages/Error';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from './consts/constants';
-import { useEffect } from 'react';
 import StartupPage from './pages/StartupPage';
 import Profile from './pages/account/Profile';
 import ChangePassword from './pages/account/ChangePassword';
-import { handleLogout } from './helpers/handleLogout';
+import { handleLogout } from './utils/handleLogout';
+import { tryAutoLoginUseEffect } from './utils/tryAutoLogin';
+import { storeDataIfAutoLoginSuccessUseEffect } from './utils/storeDataIfAutoLoginSuccess';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -33,33 +33,17 @@ function App() {
   const [refreshTokens, { data, isLoading, isSuccess, isError }] =
     useRefreshTokensMutation();
 
-  async function tryAutoLogin() {
-    const refresh_token = localStorage.getItem(REFRESH_TOKEN);
+  tryAutoLoginUseEffect(refreshTokens);
 
-    if (refresh_token) {
-      return await refreshTokens({ refresh_token });
-    }
-  }
-
-  async function storeDataIfAutoLoginSuccess() {
-    return (
-      dispatch(setUser({ ...data! })),
-      localStorage.setItem(ACCESS_TOKEN, data?.access_token!),
-      localStorage.setItem(REFRESH_TOKEN, data?.refresh_token!)
-    );
-  }
-
-  useEffect(() => {
-    tryAutoLogin();
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess) {
-      storeDataIfAutoLoginSuccess();
-    } else if (isError) {
-      handleLogout(dispatch, defaultAuth);
-    }
-  }, [isSuccess, isError]);
+  storeDataIfAutoLoginSuccessUseEffect({
+    data,
+    defaultAuth,
+    dispatch,
+    handleLogout,
+    isError,
+    isSuccess,
+    setUser,
+  });
 
   if (isLoading) {
     return <StartupPage />;

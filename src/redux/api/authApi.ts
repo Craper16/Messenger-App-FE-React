@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { AuthModel, UserInfo } from '../auth/authSlice';
-import { baseQueryWithReauth } from '../../helpers/baseQueryWithReauth';
+import { baseQueryWithReauth } from '../../utils/baseQueryWithReauth';
 
 export interface credentials {
   email: string;
