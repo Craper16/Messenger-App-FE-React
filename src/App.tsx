@@ -24,18 +24,14 @@ import { useEffect } from 'react';
 import StartupPage from './pages/StartupPage';
 import Profile from './pages/account/Profile';
 import ChangePassword from './pages/account/ChangePassword';
+import { handleLogout } from './helpers/handleLogout';
 
 function App() {
   const dispatch = useAppDispatch();
   const access_token = useAppSelector((state) => !!state.auth.access_token);
 
-  const [refreshTokens, { data, isLoading, isSuccess, isError, error }] =
+  const [refreshTokens, { data, isLoading, isSuccess, isError }] =
     useRefreshTokensMutation();
-
-  function handleLogout() {
-    dispatch(defaultAuth());
-    localStorage.clear();
-  }
 
   async function tryAutoLogin() {
     const refresh_token = localStorage.getItem(REFRESH_TOKEN);
@@ -61,7 +57,7 @@ function App() {
     if (isSuccess) {
       storeDataIfAutoLoginSuccess();
     } else if (isError) {
-      handleLogout();
+      handleLogout(dispatch, defaultAuth);
     }
   }, [isSuccess, isError]);
 
@@ -71,7 +67,7 @@ function App() {
 
   return (
     <Router>
-      <MainNavbar handleLogout={handleLogout} />
+      <MainNavbar handleLogout={() => handleLogout(dispatch, defaultAuth)} />
       <Routes>
         <Route
           path={HOME}
