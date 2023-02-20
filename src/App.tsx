@@ -29,10 +29,8 @@ function App() {
   const dispatch = useAppDispatch();
   const access_token = useAppSelector((state) => !!state.auth.access_token);
 
-  const [
-    refreshTokens,
-    { data, isLoading, isSuccess, isError, error, originalArgs },
-  ] = useRefreshTokensMutation();
+  const [refreshTokens, { data, isLoading, isSuccess, isError, error }] =
+    useRefreshTokensMutation();
 
   function handleLogout() {
     dispatch(defaultAuth());
@@ -97,10 +95,7 @@ function App() {
           path={SIGNUP}
           element={access_token ? <Navigate to={HOME} /> : <Signup />}
         />
-        <Route
-          path="*"
-          element={<Error />}
-        />
+        <Route path='*' element={<Error />} />
       </Routes>
     </Router>
   );
