@@ -23,6 +23,7 @@ export interface ChangePasswordResponse extends UserInfo {
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: baseQueryWithReauth,
+  keepUnusedDataFor: 0,
   endpoints: (builder) => ({
     signInUser: builder.mutation<AuthModel, credentials>({
       query: (body) => ({

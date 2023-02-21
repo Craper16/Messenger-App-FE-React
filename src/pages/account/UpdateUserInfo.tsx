@@ -12,12 +12,14 @@ import { useNavigate } from 'react-router-dom';
 import { PROFILE } from '../../consts/routeNames';
 import { useUpdateUserInfoMutation } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { updateUserInfoValidations } from '../../validations/auth/authValidations';
 
 export default function UpdateUserInfo() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { displayName, phoneNumber } = useAppSelector((state) => state.auth);
 
   const [updateUserInfo, { isError, isLoading, isSuccess, data, error }] =
     useUpdateUserInfoMutation();
@@ -32,7 +34,10 @@ export default function UpdateUserInfo() {
   return (
     <Formik
       validateOnMount={true}
-      initialValues={{ displayName: '', phoneNumber: '' }}
+      initialValues={{
+        displayName: displayName || '',
+        phoneNumber: phoneNumber || '',
+      }}
       onSubmit={(values) =>
         updateUserInfo({
           displayName: values.displayName,
@@ -54,7 +59,7 @@ export default function UpdateUserInfo() {
           <FormControl isInvalid={!!errors.displayName && touched.displayName}>
             <FormLabel>Display Name</FormLabel>
             <Input
-              type='text'
+              type="text"
               value={values.displayName}
               onChange={handleChange('displayName')}
               onBlur={handleBlur('displayName')}
@@ -64,7 +69,7 @@ export default function UpdateUserInfo() {
           <FormControl isInvalid={!!errors.phoneNumber && touched.phoneNumber}>
             <FormLabel>Phone Number</FormLabel>
             <Input
-              type='number'
+              type="number"
               value={values.phoneNumber}
               onChange={handleChange('phoneNumber')}
               onBlur={handleBlur('phoneNumber')}

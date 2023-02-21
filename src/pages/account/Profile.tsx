@@ -1,4 +1,4 @@
-import { Button, Spinner } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CHANGE_PASSWORD, UPDATE_USER_INFO } from '../../consts/routeNames';
@@ -14,7 +14,7 @@ export default function Profile() {
     (state) => state.auth
   );
 
-  const { isError, isFetching, isSuccess, data, error } = useGetUserDataQuery();
+  const { isError, isSuccess, data, error } = useGetUserDataQuery();
 
   useEffect(() => {
     if (isSuccess) {
@@ -24,10 +24,6 @@ export default function Profile() {
 
   if (isError) {
     return <div>{(error as { message: string; status: number })?.message}</div>;
-  }
-
-  if (isFetching) {
-    return <Spinner />;
   }
 
   return (
