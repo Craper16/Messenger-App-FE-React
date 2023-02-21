@@ -66,6 +66,18 @@ export const authApi = createApi({
       transformErrorResponse: (response) =>
         (response as AuthErrorResponse).data.data,
     }),
+    updateUserInfo: builder.mutation<
+      UserInfo,
+      { displayName: string; phoneNumber: number }
+    >({
+      query: (body) => ({
+        url: '/auth/me/update',
+        method: 'PUT',
+        body,
+      }),
+      transformErrorResponse: (response) =>
+        (response as AuthErrorResponse).data.data,
+    }),
   }),
 });
 
@@ -75,4 +87,5 @@ export const {
   useRefreshTokensMutation,
   useGetUserDataQuery,
   useChangeUserPasswordMutation,
+  useUpdateUserInfoMutation,
 } = authApi;
