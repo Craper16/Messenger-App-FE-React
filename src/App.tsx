@@ -16,6 +16,7 @@ import {
   PROFILE,
   SIGNIN,
   SIGNUP,
+  UPDATE_USER_INFO,
 } from './consts/routeNames';
 import { useRefreshTokensMutation } from './redux/api/authApi';
 import Error from './pages/Error';
@@ -25,6 +26,7 @@ import ChangePassword from './pages/account/ChangePassword';
 import { handleLogout } from './utils/handleLogout';
 import { tryAutoLoginUseEffect } from './utils/tryAutoLogin';
 import { storeDataIfAutoLoginSuccessUseEffect } from './utils/storeDataIfAutoLoginSuccess';
+import UpdateUserInfo from './pages/account/UpdateUserInfo';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -65,6 +67,12 @@ function App() {
           path={CHANGE_PASSWORD}
           element={
             !access_token ? <Navigate to={SIGNIN} /> : <ChangePassword />
+          }
+        />
+        <Route
+          path={UPDATE_USER_INFO}
+          element={
+            !access_token ? <Navigate to={SIGNIN} /> : <UpdateUserInfo />
           }
         />
         <Route

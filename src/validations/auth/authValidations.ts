@@ -32,7 +32,7 @@ export const signUpValidations = yup.object().shape({
   phoneNumber: yup
     .string()
     .required('Phone number is required')
-    .max(8, 'Phone number must be 8 numbers'),
+    .length(8, 'Phone number must be 8 numbers'),
 });
 
 export const changePasswordValidations = yup.object().shape({
@@ -44,4 +44,16 @@ export const changePasswordValidations = yup.object().shape({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/,
       'New password must contain 8 or more characters, with 1 upper case, 1 lower case and a special character'
     ),
+});
+
+export const updateUserInfoValidations = yup.object().shape({
+  displayName: yup
+    .string()
+    .required('Display name must not be empty')
+    .min(3, 'Display name must be between 3 and 13 characters long')
+    .max(13, 'Display name must be between 3 and 13 characters long'),
+  phoneNumber: yup
+    .string()
+    .required('Phone number is required')
+    .length(8, 'Phone number must be 8 numbers'),
 });
