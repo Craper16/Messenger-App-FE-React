@@ -40,7 +40,7 @@ export default function MainNavbar({ handleLogout }: MainNavbarProps) {
             className="font-bold text-4xl text-stone-300"
             onClick={() => navigate('/')}
           >
-            Articles
+            Saad Messenger
           </Box>
         </HStack>
         {access_token ? (

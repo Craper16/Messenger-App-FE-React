@@ -83,7 +83,10 @@ function App() {
           path={SIGNUP}
           element={access_token ? <Navigate to={HOME} /> : <Signup />}
         />
-        <Route path='*' element={<Error />} />
+        <Route
+          path="*"
+          element={<Error />}
+        />
       </Routes>
     </Router>
   );
