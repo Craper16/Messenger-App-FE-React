@@ -17,6 +17,10 @@ import {
   SIGNIN,
   SIGNUP,
   UPDATE_USER_INFO,
+  BROWSE_SERVERS,
+  CREATE_SERVER,
+  SEARCH_SERVERS,
+  SERVER,
 } from './consts/routeNames';
 import { useRefreshTokensMutation } from './redux/api/authApi';
 import Error from './pages/Error';
@@ -27,6 +31,12 @@ import { handleLogout } from './utils/handleLogout';
 import { tryAutoLoginUseEffect } from './utils/tryAutoLogin';
 import { storeDataIfAutoLoginSuccessUseEffect } from './utils/storeDataIfAutoLoginSuccess';
 import UpdateUserInfo from './pages/account/UpdateUserInfo';
+import { defaultServers } from './redux/server/serverSlice';
+import { defaultSocket } from './redux/socket/socketSlice';
+import CreateServer from './pages/home/servers/CreateServer';
+import BrowseServers from './pages/home/servers/BrowseServers';
+import SearchServers from './pages/home/servers/SearchServers';
+import Server from './pages/home/servers/Server';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -40,6 +50,8 @@ function App() {
   storeDataIfAutoLoginSuccessUseEffect({
     data,
     defaultAuth,
+    defaultServers,
+    defaultSocket,
     dispatch,
     handleLogout,
     isError,
@@ -53,7 +65,16 @@ function App() {
 
   return (
     <Router>
-      <MainNavbar handleLogout={() => handleLogout(dispatch, defaultAuth)} />
+      <MainNavbar
+        handleLogout={() =>
+          handleLogout({
+            defaultAuth,
+            dispatch,
+            defaultServers,
+            defaultSocket,
+          })
+        }
+      />
       <Routes>
         <Route
           path={HOME}
@@ -74,6 +95,22 @@ function App() {
           element={
             !access_token ? <Navigate to={SIGNIN} /> : <UpdateUserInfo />
           }
+        />
+        <Route
+          path={CREATE_SERVER}
+          element={!access_token ? <Navigate to={SIGNIN} /> : <CreateServer />}
+        />
+        <Route
+          path={BROWSE_SERVERS}
+          element={!access_token ? <Navigate to={SIGNIN} /> : <BrowseServers />}
+        />
+        <Route
+          path={SEARCH_SERVERS}
+          element={!access_token ? <Navigate to={SIGNIN} /> : <SearchServers />}
+        />
+        <Route
+          path={SERVER}
+          element={!access_token ? <Navigate to={SIGNIN} /> : <Server />}
         />
         <Route
           path={SIGNIN}

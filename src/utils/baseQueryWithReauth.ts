@@ -8,6 +8,8 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from '../consts/constants';
 import { AuthModel, defaultAuth, setUser } from '../redux/auth/authSlice';
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { handleLogout } from './handleLogout';
+import { defaultServers } from '../redux/server/serverSlice';
+import { defaultSocket } from '../redux/socket/socketSlice';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_KEY,
@@ -54,7 +56,12 @@ export const baseQueryWithReauth: BaseQueryFn<
       );
       result = await baseQuery(args, api, extraOptions);
     } else {
-      handleLogout(api.dispatch, defaultAuth);
+      handleLogout({
+        dispatch: api.dispatch,
+        defaultAuth,
+        defaultServers,
+        defaultSocket,
+      });
     }
   }
   return result;

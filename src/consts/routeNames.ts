@@ -4,3 +4,8 @@ export const SIGNUP = '/signup';
 export const PROFILE = '/profile';
 export const CHANGE_PASSWORD = '/profile/change-password';
 export const UPDATE_USER_INFO = '/profile/update-info';
+export const CREATE_SERVER = '/servers/create-server';
+export const SEARCH_SERVERS = '/servers/search';
+export const BROWSE_SERVERS = '/servers/browse';
+export const SERVER = '/servers/:serverId';
+export const SERVER_NAV = (serverId: string) => `/servers/${serverId}`;

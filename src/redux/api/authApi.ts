@@ -12,7 +12,7 @@ export interface signUpInfo extends credentials {
   phoneNumber: number;
 }
 
-export interface AuthErrorResponse {
+export interface ErrorResponse {
   data: { data: { message: string; status: string } };
 }
 
@@ -32,7 +32,7 @@ export const authApi = createApi({
         body,
       }),
       transformErrorResponse: (response) =>
-        (response as AuthErrorResponse).data.data,
+        (response as ErrorResponse).data.data,
     }),
     signUpUser: builder.mutation<AuthModel, signUpInfo>({
       query: (body) => ({
@@ -41,7 +41,7 @@ export const authApi = createApi({
         body,
       }),
       transformErrorResponse: (response) =>
-        (response as AuthErrorResponse).data.data,
+        (response as ErrorResponse).data.data,
     }),
     refreshTokens: builder.mutation<AuthModel, { refresh_token: string }>({
       query: (body) => ({
@@ -65,7 +65,7 @@ export const authApi = createApi({
         body,
       }),
       transformErrorResponse: (response) =>
-        (response as AuthErrorResponse).data.data,
+        (response as ErrorResponse).data.data,
     }),
     updateUserInfo: builder.mutation<
       UserInfo,
@@ -77,7 +77,7 @@ export const authApi = createApi({
         body,
       }),
       transformErrorResponse: (response) =>
-        (response as AuthErrorResponse).data.data,
+        (response as ErrorResponse).data.data,
     }),
   }),
 });

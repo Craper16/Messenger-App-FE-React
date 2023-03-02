@@ -1,8 +1,10 @@
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
+import { connect, Socket } from 'socket.io-client';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../consts/constants';
 import { AuthModel } from '../redux/auth/authSlice';
-import { AppDispatch } from '../redux/store';
+import { setSocket } from '../redux/socket/socketSlice';
+import { AppDispatch, store } from '../redux/store';
 
 export function storeAuthData(
   dispatch: AppDispatch,
@@ -29,6 +31,10 @@ export const storeAuthDataOnSuccessfulAuthUseEffect = ({
 }) =>
   useEffect(() => {
     if (isSuccess) {
+      const socket = connect(import.meta.env.VITE_API_KEY, {
+        query: { access_token: data?.access_token! },
+      });
       storeAuthData(dispatch, setUser, data!);
+      store.dispatch(setSocket(socket));
     }
   }, [isSuccess, dispatch]);

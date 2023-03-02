@@ -1,74 +1,85 @@
-import { Button, Input } from '@chakra-ui/react';
-import { useCallback, useEffect, useState } from 'react';
-import { connect } from 'socket.io-client';
-import { ACCESS_TOKEN } from '../../consts/constants';
-import { useAppSelector } from '../../redux/hooks';
-import { openWebSocketOnMount } from '../../utils/openWebSocketOnMount';
-
-interface MessageModel {
-  content: string;
-  sender: string;
-  receiver: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  SimpleGrid,
+  Text,
+} from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  BROWSE_SERVERS,
+  CREATE_SERVER,
+  SERVER_NAV,
+} from '../../consts/routeNames';
+import { useFetchUserServersQuery } from '../../redux/api/serverApi';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { setUserServers } from '../../redux/server/serverSlice';
 
 export default function Home() {
-  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const { displayName, userId } = useAppSelector((state) => state.auth);
+  const { data, isFetching, isError, error } = useFetchUserServersQuery();
 
-  const socket = connect(import.meta.env.VITE_API_KEY, {
-    query: { access_token: localStorage.getItem(ACCESS_TOKEN) },
-    reconnection: true,
-    rejectUnauthorized: true,
-  });
+  const { userId } = useAppSelector((state) => state.auth);
+  const { userServers } = useAppSelector((state) => state.server);
+  const socket = useAppSelector((state) => state.socket.socket);
 
-  async function sendMessage() {
-    if (!message) return;
-
-    const messageData: MessageModel = {
-      content: message,
-      receiver: '63f15a1fe14c72f913df92f7',
-      sender: userId!,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    await socket!.emit('send_message', messageData);
-    setMessage('');
-  }
-
-  // openWebSocketOnMount(localStorage.getItem(ACCESS_TOKEN)!);
-
-  useEffect(
-    useCallback(() => {
-      socket!.on('connect', () => {
-        console.log('We are here');
-      });
-
-      return () => {
-        socket!.disconnect();
-      };
-    }, []),
-    [socket]
-  );
+  const fetchingDataIsSuccessfulButNoServersFound =
+    !isFetching && !isError && userServers.length === 0;
 
   useEffect(() => {
-    console.log('This is causing rerenders');
-    socket!.on('receive_message', (data: MessageModel) => {
-      console.log(data);
-    });
-  }, [socket]);
+    if (data) {
+      console.log('we are reaching here');
+      dispatch(setUserServers({ servers: data }));
+      socket.emit('join_servers', [...data.map((server) => server._id)]);
+    }
+  }, [data]);
+
+  if (isError) {
+    return (
+      <Text>{(error as { message: string; status: number })?.message}</Text>
+    );
+  }
 
   return (
-    <div>
-      <div>{displayName}</div>
-      <Input
-        value={message}
-        onChange={(e) => setMessage(e.currentTarget.value)}
-      />
-      <Button onClick={sendMessage}>Send Message</Button>
-    </div>
+    <>
+      <Text className="text-center">Your Servers</Text>
+      {fetchingDataIsSuccessfulButNoServersFound && (
+        <Box className="justify-center align-middle m-auto">
+          <Text>
+            You dont have any servers joined, join or create a server to start
+            the fun
+          </Text>
+          <Button onClick={() => navigate(BROWSE_SERVERS)}>
+            Browse Servers
+          </Button>
+          <Button onClick={() => navigate(CREATE_SERVER)}>
+            Create a Server
+          </Button>
+        </Box>
+      )}
+      <SimpleGrid
+        columnGap={25}
+        columns={4}
+      >
+        {userServers.map((server) => (
+          <Card
+            key={server._id}
+            className="col-start-auto w-48 h-48 cursor-pointer m-10 bg-red-400"
+            onClick={() => navigate(SERVER_NAV(server._id))}
+          >
+            <CardHeader className="font-bold">{server.name}</CardHeader>
+            <CardBody>
+              <Text>Members: {server.members.length}</Text>
+              {server.owner === userId && <Text>Owner</Text>}
+            </CardBody>
+          </Card>
+        ))}
+      </SimpleGrid>
+    </>
   );
 }
