@@ -9,6 +9,8 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
+import ServerItem from '../../components/Server/ServerItem';
 import {
   BROWSE_SERVERS,
   CREATE_SERVER,
@@ -33,9 +35,10 @@ export default function Home() {
 
   useEffect(() => {
     if (data) {
-      console.log('we are reaching here');
       dispatch(setUserServers({ servers: data }));
-      socket.emit('join_servers', [...data.map((server) => server._id)]);
+      (socket as Socket).emit('join_servers', [
+        ...data.map((server) => server._id),
+      ]);
     }
   }, [data]);
 
@@ -67,17 +70,12 @@ export default function Home() {
         columns={4}
       >
         {userServers.map((server) => (
-          <Card
+          <ServerItem
             key={server._id}
-            className="col-start-auto w-48 h-48 cursor-pointer m-10 bg-red-400"
-            onClick={() => navigate(SERVER_NAV(server._id))}
-          >
-            <CardHeader className="font-bold">{server.name}</CardHeader>
-            <CardBody>
-              <Text>Members: {server.members.length}</Text>
-              {server.owner === userId && <Text>Owner</Text>}
-            </CardBody>
-          </Card>
+            navigate={navigate}
+            server={server}
+            userId={userId!}
+          />
         ))}
       </SimpleGrid>
     </>

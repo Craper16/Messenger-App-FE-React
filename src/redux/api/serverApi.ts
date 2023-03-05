@@ -28,8 +28,11 @@ export const serverApi = createApi({
     searchServers: builder.mutation<ServerData[], string>({
       query: (body) => ({
         url: '/server/search',
+        method: 'POST',
         body: { search: body },
       }),
+      transformResponse: (response: { servers: ServerData[] }) =>
+        response.servers,
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,
     }),
@@ -68,12 +71,11 @@ export const serverApi = createApi({
     }),
     joinServer: builder.mutation<
       { message: string; server: ServerData },
-      string
+      { serverId: string }
     >({
-      query: (body) => ({
-        url: '/server/join/',
+      query: ({ serverId }) => ({
+        url: `/server/join/${serverId}`,
         method: 'PUT',
-        params: { serverId: body },
       }),
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,

@@ -15,8 +15,7 @@ const socketSlice = createSlice({
   reducers: {
     defaultSocket: (state) => {
       if (state.socket) {
-        
-      state.socket!.disconnect();
+        state.socket!.disconnect();
       }
       state.socket = null;
     },
