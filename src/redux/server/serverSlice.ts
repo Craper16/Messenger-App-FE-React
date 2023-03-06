@@ -1,17 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface MessageModel {
-  content: string;
-  receiver: string;
-  sender: string;
-  sentAt: Date;
-}
+import { MessageDataModel } from '../../pages/home/servers/Server';
 
 export interface ServerData {
   name: string;
   members: string[];
   owner: string;
-  messages: MessageModel[];
+  messages: MessageDataModel[];
   _id: string;
 }
 

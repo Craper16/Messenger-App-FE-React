@@ -1,4 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { MessageDataModel } from '../../pages/home/servers/Server';
 import { baseQueryWithReauth } from '../../utils/baseQueryWithReauth';
 import { ServerData } from '../server/serverSlice';
 import { ErrorResponse } from './authApi';
@@ -107,6 +108,16 @@ export const serverApi = createApi({
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,
     }),
+    addMessageToServer: builder.mutation<ServerData, MessageDataModel>({
+      query: (body) => ({
+        url: '/server/add-message',
+        method: 'PUT',
+        body,
+      }),
+      transformResponse: (response: { server: ServerData }) => response.server,
+      transformErrorResponse: (response) =>
+        (response as ErrorResponse).data.data,
+    }),
   }),
 });
 
@@ -121,4 +132,5 @@ export const {
   useJoinServerMutation,
   useLeaveServerMutation,
   useKickFromServerMutation,
+  useAddMessageToServerMutation,
 } = serverApi;
