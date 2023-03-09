@@ -1,4 +1,10 @@
-import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
+import {
+  Text,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Spinner,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Socket } from 'socket.io-client';
@@ -82,18 +88,39 @@ export default function Server() {
     });
   }, [socket]);
 
+  if (isError) {
+    return (
+      <Text>{(error as { message: string; status: number })?.message}</Text>
+    );
+  }
+
   return (
     <div>
+      {isFetching && (
+        <div className="flex justify-center align-middle mt-52">
+          <Spinner
+            size="xl"
+            className="text-purple-900"
+          />
+        </div>
+      )}
       <div className="overflow-y-auto overflow-x-hidden h-96">
         {sentAndReceivedMessages.map((message, i) => (
-          <div key={i}>
+          <div
+            key={i}
+            className="border border-solid border-y-cyan-800 m-2 p-2"
+          >
+            <div className="font-bold font-sans">
+              {message.sender.displayName}
+            </div>
             <div>{message.content}</div>
-            <div>{message.sender.displayName}</div>
           </div>
         ))}
       </div>
-      <InputGroup className="left-0 bottom-0 w-full mt-72">
+
+      <InputGroup className="flex justify-center align-middle">
         <Input
+          className="w-40"
           value={messageToSend}
           onChange={(e) => setMessageToSend(e.currentTarget.value)}
         />

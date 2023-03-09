@@ -78,7 +78,14 @@ export default function SearchServers() {
       </InputGroup>
       {searchServersReturnedObj.isError && (
         <Text>
-          {(searchServersReturnedObj.error as ErrorResponse).data.data.message}
+          {
+            (
+              searchServersReturnedObj.error as {
+                message: string;
+                status: number;
+              }
+            )?.message
+          }
         </Text>
       )}
       <div className="ml-auto m-auto mr-auto w-96 justify-center align-middle">
