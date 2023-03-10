@@ -7,9 +7,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../consts/constants';
 import { useSignUpUserMutation } from '../../redux/api/authApi';
 import { setUser } from '../../redux/auth/authSlice';
 import { useAppDispatch } from '../../redux/hooks';

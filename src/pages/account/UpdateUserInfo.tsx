@@ -7,9 +7,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PROFILE } from '../../consts/routeNames';
 import { useUpdateUserInfoMutation } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';

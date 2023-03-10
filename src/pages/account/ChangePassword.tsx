@@ -9,7 +9,6 @@ import {
 import { Form, Formik } from 'formik';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PROFILE } from '../../consts/routeNames';
 import { useChangeUserPasswordMutation } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch } from '../../redux/hooks';

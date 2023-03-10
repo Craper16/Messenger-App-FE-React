@@ -1,5 +1,4 @@
 import { Button } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CHANGE_PASSWORD, UPDATE_USER_INFO } from '../../consts/routeNames';
 import { useGetUserDataQuery } from '../../redux/api/authApi';

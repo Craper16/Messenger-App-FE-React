@@ -5,9 +5,8 @@ import {
   InputRightElement,
   Spinner,
 } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { Socket } from 'socket.io-client';
 import {
   useAddMessageToServerMutation,
   useFetchServerDataQuery,
