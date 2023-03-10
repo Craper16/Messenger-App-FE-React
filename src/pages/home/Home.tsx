@@ -1,20 +1,14 @@
 import {
   Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   SimpleGrid,
   Text,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Socket } from 'socket.io-client';
 import ServerItem from '../../components/Server/ServerItem';
 import {
   BROWSE_SERVERS,
   CREATE_SERVER,
-  SERVER_NAV,
 } from '../../consts/routeNames';
 import { useFetchUserServersQuery } from '../../redux/api/serverApi';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
