@@ -43,7 +43,7 @@ export default function ServerSearchItem({
   return (
     <Card
       key={server._id}
-      className="col-start-auto w-48 h-56 mt-12 cursor-pointer bg-red-400"
+      className="col-start-auto w-48 h-56 cursor-pointer bg-red-400"
       onClick={() => {
         if (server.members.find((member) => member === userId)) {
           return navigate(SERVER_NAV(server._id));

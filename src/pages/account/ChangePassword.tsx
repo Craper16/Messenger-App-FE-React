@@ -13,6 +13,7 @@ import { PROFILE } from '../../consts/routeNames';
 import { useChangeUserPasswordMutation } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch } from '../../redux/hooks';
+import { storeAuthDataOnUserInfoChange } from '../../utils/storeAuthDataOnUserInfoChange';
 import { changePasswordValidations } from '../../validations/auth/authValidations';
 
 export default function ChangePassword() {
@@ -22,12 +23,13 @@ export default function ChangePassword() {
   const [changeUserPassword, { data, isSuccess, isError, error, isLoading }] =
     useChangeUserPasswordMutation();
 
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUserInfo({ ...data! }));
-      navigate(PROFILE);
-    }
-  }, [isSuccess, dispatch]);
+  storeAuthDataOnUserInfoChange({
+    data,
+    dispatch,
+    isSuccess,
+    navigate,
+    setUserInfo,
+  });
 
   return (
     <Formik
@@ -49,7 +51,7 @@ export default function ChangePassword() {
           <FormControl isInvalid={!!errors.oldPassword && touched.oldPassword}>
             <FormLabel>Old Password</FormLabel>
             <Input
-              type="password"
+              type='password'
               value={values.oldPassword}
               onChange={handleChange('oldPassword')}
               onBlur={handleBlur('oldPassword')}
@@ -59,7 +61,7 @@ export default function ChangePassword() {
           <FormControl isInvalid={!!errors.newPassword && touched.newPassword}>
             <FormLabel>New Password</FormLabel>
             <Input
-              type="password"
+              type='password'
               value={values.newPassword}
               onChange={handleChange('newPassword')}
               onBlur={handleBlur('newPassword')}

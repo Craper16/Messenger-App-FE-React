@@ -5,6 +5,7 @@ import { CHANGE_PASSWORD, UPDATE_USER_INFO } from '../../consts/routeNames';
 import { useGetUserDataQuery } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { storeAuthDataOnUserInfoChange } from '../../utils/storeAuthDataOnUserInfoChange';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -16,11 +17,13 @@ export default function Profile() {
 
   const { isError, isSuccess, data, error } = useGetUserDataQuery();
 
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUserInfo({ ...data! }));
-    }
-  }, [isSuccess]);
+  storeAuthDataOnUserInfoChange({
+    data,
+    dispatch,
+    isSuccess,
+    navigate: undefined,
+    setUserInfo,
+  });
 
   if (isError) {
     return <div>{(error as { message: string; status: number })?.message}</div>;

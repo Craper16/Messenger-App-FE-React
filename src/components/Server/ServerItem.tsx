@@ -18,13 +18,13 @@ export default function ServerItem({
   return (
     <Card
       key={server._id}
-      className="col-start-auto w-48 h-48 cursor-pointer m-10 bg-red-400"
+      className='col-start-auto w-48 h-48 cursor-pointer m-10 bg-red-400'
       onClick={() => navigate(SERVER_NAV(server._id))}
     >
-      <CardHeader className="font-bold">{server.name}</CardHeader>
+      <CardHeader className='font-bold'>{server.name}</CardHeader>
       <CardBody>
         <Text>Members: {server.members.length}</Text>
-        {server.owner === userId && <Text>Owner</Text>}
+        {server.owner === userId ? <Text>Owner</Text> : <Text>Member</Text>}
       </CardBody>
     </Card>
   );

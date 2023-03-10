@@ -19,6 +19,7 @@ import {
 import { useFetchUserServersQuery } from '../../redux/api/serverApi';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setUserServers } from '../../redux/server/serverSlice';
+import { setUserServersAndJoinServers } from '../../utils/setUserServersAndJoinServers';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -33,14 +34,7 @@ export default function Home() {
   const fetchingDataIsSuccessfulButNoServersFound =
     !isFetching && !isError && userServers.length === 0;
 
-  useEffect(() => {
-    if (data) {
-      dispatch(setUserServers({ servers: data }));
-      (socket as Socket).emit('join_servers', [
-        ...data.map((server) => server._id),
-      ]);
-    }
-  }, [data]);
+  setUserServersAndJoinServers({ data, dispatch, setUserServers, socket });
 
   if (isError) {
     return (
@@ -50,9 +44,9 @@ export default function Home() {
 
   return (
     <>
-      <Text className="text-center">Your Servers</Text>
+      <Text className='text-center'>Your Servers</Text>
       {fetchingDataIsSuccessfulButNoServersFound && (
-        <Box className="justify-center align-middle m-auto">
+        <Box className='justify-center align-middle m-auto'>
           <Text>
             You dont have any servers joined, join or create a server to start
             the fun
@@ -65,10 +59,7 @@ export default function Home() {
           </Button>
         </Box>
       )}
-      <SimpleGrid
-        columnGap={25}
-        columns={4}
-      >
+      <SimpleGrid columnGap={25} columns={4}>
         {userServers.map((server) => (
           <ServerItem
             key={server._id}

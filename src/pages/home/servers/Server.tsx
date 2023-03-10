@@ -5,7 +5,7 @@ import {
   InputRightElement,
   Spinner,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { Socket } from 'socket.io-client';
 import {
@@ -14,21 +14,16 @@ import {
 } from '../../../redux/api/serverApi';
 import { useAppSelector } from '../../../redux/hooks';
 import { MdSend } from 'react-icons/md';
-import { ServerData } from '../../../redux/server/serverSlice';
-
-export interface MessageDataModel {
-  content: string;
-  sender: {
-    _id: string;
-    displayName: string;
-    email: string;
-    phoneNumber: number;
-  };
-  sentAt: Date;
-  server: ServerData;
-}
+import {
+  MessageDataModel,
+  sendMessageToServer,
+} from '../../../helpers/servers/sendMessageToServer';
+import { scrollToBottomOfMessages } from '../../../utils/scrollToBottomOfMessages';
+import { addMessagesFromServer } from '../../../utils/addMessagesFromServer';
+import { addMessagesReceived } from '../../../utils/addMessagesReceived';
 
 export default function Server() {
+  const messagesDivRef = useRef<HTMLDivElement>(null);
   const [messageToSend, setMessageToSend] = useState('');
   const [sentAndReceivedMessages, setSentAndReceivedMessages] = useState<
     MessageDataModel[]
@@ -45,48 +40,13 @@ export default function Server() {
     serverId: serverId!,
   });
 
-  const [addMessageToServerMutation, addMessageToServerMutationResponse] =
-    useAddMessageToServerMutation();
+  const [addMessageToServerMutation] = useAddMessageToServerMutation();
 
-  async function sendMessageToServer(message: string) {
-    if (!message) return;
+  scrollToBottomOfMessages({ messagesDivRef, sentAndReceivedMessages });
 
-    const messageData: MessageDataModel = {
-      content: message!,
-      sender: {
-        _id: userId!,
-        displayName: displayName!,
-        email: email!,
-        phoneNumber: phoneNumber!,
-      },
-      sentAt: new Date(),
-      server: data!,
-    };
+  addMessagesFromServer({ data, setSentAndReceivedMessages });
 
-    await (socket as Socket).emit('send_message', messageData);
-
-    setSentAndReceivedMessages((prevSentAndReceivedMessages) => [
-      ...prevSentAndReceivedMessages,
-      messageData!,
-    ]);
-    addMessageToServerMutation(messageData);
-    setMessageToSend('');
-  }
-
-  useEffect(() => {
-    if (data) {
-      setSentAndReceivedMessages([...data?.messages]);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    (socket as Socket).on('receive_message', (data: MessageDataModel) => {
-      setSentAndReceivedMessages((prevSentAndReceivedMessages) => [
-        ...prevSentAndReceivedMessages,
-        data!,
-      ]);
-    });
-  }, [socket]);
+  addMessagesReceived({ setSentAndReceivedMessages, socket });
 
   if (isError) {
     return (
@@ -97,20 +57,18 @@ export default function Server() {
   return (
     <div>
       {isFetching && (
-        <div className="flex justify-center align-middle mt-52">
-          <Spinner
-            size="xl"
-            className="text-purple-900"
-          />
+        <div className='flex justify-center align-middle mt-52'>
+          <Spinner size='xl' className='text-purple-900' />
         </div>
       )}
-      <div className="overflow-y-auto overflow-x-hidden h-96">
+      <div className='overflow-y-auto overflow-x-hidden h-96'>
         {sentAndReceivedMessages.map((message, i) => (
           <div
+            ref={messagesDivRef}
             key={i}
-            className="border border-solid border-y-cyan-800 m-2 p-2"
+            className='border border-solid border-y-cyan-800 m-2 p-2'
           >
-            <div className="font-bold font-sans">
+            <div className='font-bold font-sans'>
               {message.sender.displayName}
             </div>
             <div>{message.content}</div>
@@ -118,16 +76,29 @@ export default function Server() {
         ))}
       </div>
 
-      <InputGroup className="flex justify-center align-middle">
+      <InputGroup className='flex justify-center align-middle'>
         <Input
-          className="w-40"
+          className='w-40'
           value={messageToSend}
           onChange={(e) => setMessageToSend(e.currentTarget.value)}
         />
         <InputRightElement
-          onClick={() => sendMessageToServer(messageToSend)}
-          className="cursor-pointer"
-          children={<MdSend className="text-purple-900" />}
+          onClick={() =>
+            sendMessageToServer({
+              addMessageToServerMutation,
+              displayName: displayName!,
+              email: email!,
+              message: messageToSend,
+              phoneNumber: phoneNumber!,
+              serverData: data!,
+              setMessageToSend,
+              setSentAndReceivedMessages,
+              socket,
+              userId: userId!,
+            })
+          }
+          className='cursor-pointer'
+          children={<MdSend className='text-purple-900' />}
         />
       </InputGroup>
     </div>
