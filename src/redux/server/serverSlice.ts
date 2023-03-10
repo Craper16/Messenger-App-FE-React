@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MessageDataModel } from '../../pages/home/servers/Server';
-
+import { MessageDataModel } from '../../helpers/servers/sendMessageToServer';
 export interface ServerData {
   name: string;
   members: string[];

@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { MessageDataModel } from '../../pages/home/servers/Server';
+import { MessageDataModel } from '../../helpers/servers/sendMessageToServer';
 import { baseQueryWithReauth } from '../../utils/baseQueryWithReauth';
 import { ServerData } from '../server/serverSlice';
 import { ErrorResponse } from './authApi';
@@ -21,8 +21,10 @@ export const serverApi = createApi({
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,
     }),
-    fetchAllServers: builder.query<ServerData[], void>({
-      query: () => '/server/all',
+    fetchAllServers: builder.query<ServerData[], number>({
+      query: (page) => `/server/all?page=${page}`,
+      transformResponse: (response: { servers: ServerData[] }) =>
+        response.servers,
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,
     }),
