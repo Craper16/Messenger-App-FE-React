@@ -5,6 +5,7 @@ import {
   FormLabel,
   Input,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { useEffect } from 'react';
@@ -16,6 +17,7 @@ import { storeAuthDataOnUserInfoChange } from '../../utils/storeAuthDataOnUserIn
 import { changePasswordValidations } from '../../validations/auth/authValidations';
 
 export default function ChangePassword() {
+  const toast = useToast();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -28,6 +30,7 @@ export default function ChangePassword() {
     isSuccess,
     navigate,
     setUserInfo,
+    toast,
   });
 
   return (

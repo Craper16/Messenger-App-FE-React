@@ -16,7 +16,7 @@ export interface ErrorResponse {
   data: { data: { message: string; status: string } };
 }
 
-export interface ChangePasswordResponse extends UserInfo {
+export interface UpdateUserResponse extends UserInfo {
   message: string;
 }
 
@@ -56,7 +56,7 @@ export const authApi = createApi({
       }),
     }),
     changeUserPassword: builder.mutation<
-      ChangePasswordResponse,
+      UpdateUserResponse,
       { oldPassword: string; newPassword: string }
     >({
       query: (body) => ({
@@ -68,7 +68,7 @@ export const authApi = createApi({
         (response as ErrorResponse).data.data,
     }),
     updateUserInfo: builder.mutation<
-      UserInfo,
+      UpdateUserResponse,
       { displayName: string; phoneNumber: number }
     >({
       query: (body) => ({

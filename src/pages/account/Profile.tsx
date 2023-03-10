@@ -22,6 +22,7 @@ export default function Profile() {
     isSuccess,
     navigate: undefined,
     setUserInfo,
+    toast: undefined,
   });
 
   if (isError) {
