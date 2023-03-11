@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../../components/ErrorMessage';
 import { useUpdateUserInfoMutation } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -62,7 +63,7 @@ export default function UpdateUserInfo() {
           <FormControl isInvalid={!!errors.displayName && touched.displayName}>
             <FormLabel>Display Name</FormLabel>
             <Input
-              type='text'
+              type="text"
               value={values.displayName}
               onChange={handleChange('displayName')}
               onBlur={handleBlur('displayName')}
@@ -72,7 +73,7 @@ export default function UpdateUserInfo() {
           <FormControl isInvalid={!!errors.phoneNumber && touched.phoneNumber}>
             <FormLabel>Phone Number</FormLabel>
             <Input
-              type='number'
+              type="number"
               value={values.phoneNumber}
               onChange={handleChange('phoneNumber')}
               onBlur={handleBlur('phoneNumber')}
@@ -87,9 +88,9 @@ export default function UpdateUserInfo() {
             Confirm
           </Button>
           {isError && (
-            <Text color={'black'}>
-              {(error as { message: string; status: string })?.message}
-            </Text>
+            <ErrorMessage
+              message={(error as { message: string; status: string }).message}
+            />
           )}
         </Form>
       )}

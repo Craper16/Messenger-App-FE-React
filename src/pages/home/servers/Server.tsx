@@ -20,6 +20,9 @@ import {
 import { scrollToBottomOfMessages } from '../../../utils/scrollToBottomOfMessages';
 import { addMessagesFromServer } from '../../../utils/addMessagesFromServer';
 import { addMessagesReceived } from '../../../utils/addMessagesReceived';
+import ErrorMessage from '../../../components/ErrorMessage';
+import LoadingIndicator from '../../../components/LoadingIndicator';
+import MessageItem from '../../../components/Messages/MessageItem';
 
 export default function Server() {
   const messagesDivRef = useRef<HTMLDivElement>(null);
@@ -49,35 +52,27 @@ export default function Server() {
 
   if (isError) {
     return (
-      <Text>{(error as { message: string; status: number })?.message}</Text>
+      <ErrorMessage
+        message={(error as { message: string; status: number }).message}
+      />
     );
   }
 
   return (
     <div>
-      {isFetching && (
-        <div className='flex justify-center align-middle mt-52'>
-          <Spinner size='xl' className='text-purple-900' />
-        </div>
-      )}
-      <div className='overflow-y-auto overflow-x-hidden h-96'>
+      {isFetching && <LoadingIndicator />}
+      <div className="overflow-y-auto overflow-x-hidden h-96">
         {sentAndReceivedMessages.map((message, i) => (
-          <div
-            ref={messagesDivRef}
+          <MessageItem
+            message={message}
+            messagesDivRef={messagesDivRef}
             key={i}
-            className='border border-solid border-y-cyan-800 m-2 p-2'
-          >
-            <div className='font-bold font-sans'>
-              {message.sender.displayName}
-            </div>
-            <div>{message.content}</div>
-          </div>
+          />
         ))}
       </div>
-
-      <InputGroup className='flex justify-center align-middle'>
+      <InputGroup className="flex justify-center align-middle">
         <Input
-          className='w-40'
+          className="w-40"
           value={messageToSend}
           onChange={(e) => setMessageToSend(e.currentTarget.value)}
         />
@@ -96,8 +91,8 @@ export default function Server() {
               userId: userId!,
             })
           }
-          className='cursor-pointer'
-          children={<MdSend className='text-purple-900' />}
+          className="cursor-pointer"
+          children={<MdSend className="text-purple-900" />}
         />
       </InputGroup>
     </div>

@@ -1,15 +1,8 @@
-import {
-  Box,
-  Button,
-  SimpleGrid,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, SimpleGrid, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../../components/ErrorMessage';
 import ServerItem from '../../components/Server/ServerItem';
-import {
-  BROWSE_SERVERS,
-  CREATE_SERVER,
-} from '../../consts/routeNames';
+import { BROWSE_SERVERS, CREATE_SERVER } from '../../consts/routeNames';
 import { useFetchUserServersQuery } from '../../redux/api/serverApi';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setUserServers } from '../../redux/server/serverSlice';
@@ -32,15 +25,17 @@ export default function Home() {
 
   if (isError) {
     return (
-      <Text>{(error as { message: string; status: number })?.message}</Text>
+      <ErrorMessage
+        message={(error as { message: string; status: number }).message}
+      />
     );
   }
 
   return (
     <>
-      <Text className='text-center'>Your Servers</Text>
+      <Text className="text-center">Your Servers</Text>
       {fetchingDataIsSuccessfulButNoServersFound && (
-        <Box className='justify-center align-middle m-auto'>
+        <Box className="justify-center align-middle m-auto">
           <Text>
             You dont have any servers joined, join or create a server to start
             the fun
@@ -53,7 +48,10 @@ export default function Home() {
           </Button>
         </Box>
       )}
-      <SimpleGrid columnGap={25} columns={4}>
+      <SimpleGrid
+        columnGap={25}
+        columns={4}
+      >
         {userServers.map((server) => (
           <ServerItem
             key={server._id}

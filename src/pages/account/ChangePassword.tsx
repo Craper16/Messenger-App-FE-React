@@ -10,6 +10,7 @@ import {
 import { Form, Formik } from 'formik';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../../components/ErrorMessage';
 import { useChangeUserPasswordMutation } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch } from '../../redux/hooks';
@@ -53,7 +54,7 @@ export default function ChangePassword() {
           <FormControl isInvalid={!!errors.oldPassword && touched.oldPassword}>
             <FormLabel>Old Password</FormLabel>
             <Input
-              type='password'
+              type="password"
               value={values.oldPassword}
               onChange={handleChange('oldPassword')}
               onBlur={handleBlur('oldPassword')}
@@ -63,7 +64,7 @@ export default function ChangePassword() {
           <FormControl isInvalid={!!errors.newPassword && touched.newPassword}>
             <FormLabel>New Password</FormLabel>
             <Input
-              type='password'
+              type="password"
               value={values.newPassword}
               onChange={handleChange('newPassword')}
               onBlur={handleBlur('newPassword')}
@@ -78,9 +79,9 @@ export default function ChangePassword() {
             Confirm
           </Button>
           {isError && (
-            <Text color={'black'}>
-              {(error as { message: string; status: string })?.message}
-            </Text>
+            <ErrorMessage
+              message={(error as { message: string; status: string }).message}
+            />
           )}
         </Form>
       )}

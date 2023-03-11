@@ -9,6 +9,8 @@ import {
 import { useAppSelector } from '../../../redux/hooks';
 import { ServerData } from '../../../redux/server/serverSlice';
 import { displaySearchedServersIfFound } from '../../../utils/displaySearchedServersIfFound';
+import ErrorMessage from '../../../components/ErrorMessage';
+import LoadingIndicator from '../../../components/LoadingIndicator';
 
 export default function BrowseServers() {
   const navigate = useNavigate();
@@ -30,35 +32,26 @@ export default function BrowseServers() {
 
   if (isError) {
     return (
-      <Text>{(error as { message: string; status: number })?.message}</Text>
+      <ErrorMessage
+        message={(error as { message: string; status: number }).message}
+      />
     );
   }
 
   return (
     <div className="flex flex-col justify-center align-middle mt-6">
       <div className="ml-auto m-auto mr-auto w-96 justify-center align-middle">
-        {isFetching && (
-          <div className="flex justify-center align-middle mt-52">
-            <Spinner
-              size="xl"
-              className="text-purple-900"
-            />
-          </div>
-        )}
+        {isFetching && <LoadingIndicator />}
         {fetchedServers?.map((server) => (
-          <div
+          <ServerSearchItem
             key={server._id}
-            className="flex justify-center align-middle mt-6"
-          >
-            <ServerSearchItem
-              userId={userId!}
-              joinServerMutation={() =>
-                joinServerMutation({ serverId: server._id })
-              }
-              navigate={navigate}
-              server={server}
-            />
-          </div>
+            userId={userId!}
+            joinServerMutation={() =>
+              joinServerMutation({ serverId: server._id })
+            }
+            navigate={navigate}
+            server={server}
+          />
         ))}
       </div>
     </div>
