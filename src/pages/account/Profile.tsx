@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -23,9 +23,13 @@ import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { storeAuthDataOnUserInfoChange } from '../../utils/storeAuthDataOnUserInfoChange';
 import { Text } from '@chakra-ui/react';
-import { useFetchUserServersQuery } from '../../redux/api/serverApi';
+import {
+  useDeleteServerMutation,
+  useFetchUserServersQuery,
+  useLeaveServerMutation,
+} from '../../redux/api/serverApi';
 import { setUserServersAndJoinServers } from '../../utils/setUserServersAndJoinServers';
-import { setUserServers } from '../../redux/server/serverSlice';
+import { leaveServer, setUserServers } from '../../redux/server/serverSlice';
 import { MdList } from 'react-icons/md';
 import ServerRowItem from '../../components/Server/ServerRowItem';
 
@@ -46,10 +50,34 @@ export default function Profile() {
 
   const getUserDataQuery = useGetUserDataQuery();
   const getUserServers = useFetchUserServersQuery();
+  const [leaveServerMutation, leaveServerMutationResponse] =
+    useLeaveServerMutation();
+  const [deleteServerMutation, deleteServerMutationResponse] =
+    useDeleteServerMutation();
+
+  console.log(leaveServerMutationResponse.data);
+  console.log(leaveServerMutationResponse.error);
+  console.log(deleteServerMutationResponse.data);
+  console.log(deleteServerMutationResponse.error);
 
   const serversToShow = userServersTooLong
     ? userServers.slice(0, 5)
     : userServers;
+
+  useEffect(() => {
+    if (
+      deleteServerMutationResponse.isSuccess ||
+      leaveServerMutationResponse.isSuccess
+    ) {
+      dispatch(
+        leaveServer({
+          serverId:
+            deleteServerMutationResponse?.data?.server._id! ||
+            leaveServerMutationResponse?.data?.server._id!,
+        })
+      );
+    }
+  }, [deleteServerMutationResponse.data, leaveServerMutationResponse.data]);
 
   setUserServersAndJoinServers({
     dispatch,
@@ -90,14 +118,20 @@ export default function Profile() {
         </Button>
         <Button onClick={() => navigate(UPDATE_USER_INFO)}>Update Info</Button>
         <Text>Your Servers: </Text>
-        {serversToShow.map((server) => (
-          <ServerRowItem
-            key={server._id}
-            navigate={navigate}
-            server={server}
-            userId={userId!}
-          />
-        ))}
+        {serversToShow.length > 0 ? (
+          serversToShow.map((server) => (
+            <ServerRowItem
+              key={server._id}
+              navigate={navigate}
+              server={server}
+              userId={userId!}
+              leaveServerMutation={leaveServerMutation}
+              deleteServerMutation={deleteServerMutation}
+            />
+          ))
+        ) : (
+          <Text>You have no servers joined</Text>
+        )}
         {userServersLengthBiggerThanFive && (
           <Button
             onClick={() =>

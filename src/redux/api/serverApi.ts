@@ -65,8 +65,8 @@ export const serverApi = createApi({
       { serverId: string; serverName: string }
     >({
       query: ({ serverId, serverName }) => ({
-        url: '/server/delete/',
-        params: { serverId },
+        url: `/server/delete/${serverId}`,
+        method: 'DELETE',
         body: serverName,
       }),
       transformErrorResponse: (response) =>
@@ -87,9 +87,9 @@ export const serverApi = createApi({
       { message: string; server: ServerData },
       string
     >({
-      query: (body) => ({
-        url: '/server/leave/',
-        params: { serverId: body },
+      query: (serverId) => ({
+        url: `/server/leave/${serverId}`,
+        method: 'PUT',
       }),
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,

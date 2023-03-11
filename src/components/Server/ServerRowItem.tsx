@@ -16,14 +16,56 @@ import { ServerData } from '../../redux/server/serverSlice';
 import { MdList } from 'react-icons/md';
 import { SERVER_NAV } from '../../consts/routeNames';
 import { NavigateFunction } from 'react-router';
+import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+  MutationDefinition,
+} from '@reduxjs/toolkit/dist/query';
 
 type props = {
   server: ServerData;
   userId: string;
   navigate: NavigateFunction;
+  leaveServerMutation: MutationTrigger<
+    MutationDefinition<
+      string,
+      BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, {}>,
+      never,
+      {
+        message: string;
+        server: ServerData;
+      },
+      'serverApi'
+    >
+  >;
+  deleteServerMutation: MutationTrigger<
+    MutationDefinition<
+      {
+        serverId: string;
+        serverName: string;
+      },
+      BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, {}>,
+      never,
+      {
+        message: string;
+        server: ServerData;
+      },
+      'serverApi'
+    >
+  >;
 };
 
-export default function ServerRowItem({ server, userId, navigate }: props) {
+export default function ServerRowItem({
+  server,
+  userId,
+  navigate,
+  deleteServerMutation,
+  leaveServerMutation,
+}: props) {
+  const isUserOwner = server._id === userId;
+
   return (
     <div key={server._id}>
       <List className="mt-12 align-middle text-center">
@@ -89,8 +131,18 @@ export default function ServerRowItem({ server, userId, navigate }: props) {
                   variant="link"
                 ></MenuButton>
                 <MenuList className="border border-gray-400">
-                  <MenuItem>
-                    {server.owner === userId ? 'Delete Server' : 'Leave Server'}
+                  <MenuItem
+                    onClick={
+                      isUserOwner
+                        ? () =>
+                            deleteServerMutation({
+                              serverId: server._id,
+                              serverName: server.name,
+                            })
+                        : () => leaveServerMutation(server._id)
+                    }
+                  >
+                    {isUserOwner ? 'Delete Server' : 'Leave Server'}
                   </MenuItem>
                   <MenuItem onClick={() => navigate(SERVER_NAV(server._id))}>
                     Go To Server

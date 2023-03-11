@@ -29,13 +29,20 @@ const serverSlice = createSlice({
     ) => {
       state.userServers = action.payload.servers;
     },
+    leaveServer: (state, action: PayloadAction<{ serverId: string }>) => {
+      state.userServers = [
+        ...state.userServers.filter(
+          (server) => server._id !== action.payload.serverId
+        ),
+      ];
+    },
     joinServer: (state, action: PayloadAction<{ server: ServerData }>) => {
       state.userServers = [action.payload.server, ...state.userServers];
     },
   },
 });
 
-export const { defaultServers, setUserServers, joinServer } =
+export const { defaultServers, setUserServers, joinServer, leaveServer } =
   serverSlice.actions;
 
 export default serverSlice.reducer;
