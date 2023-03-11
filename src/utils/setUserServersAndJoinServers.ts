@@ -16,11 +16,13 @@ export const setUserServersAndJoinServers = ({
     { servers: ServerData[] },
     'server/setUserServers'
   >;
-  socket: Socket;
+  socket?: Socket | undefined;
 }) =>
   useEffect(() => {
     if (data) {
       dispatch(setUserServers({ servers: data }));
-      socket.emit('join_servers', [...data.map((server) => server._id)]);
+      if (socket) {
+        socket.emit('join_servers', [...data.map((server) => server._id)]);
+      }
     }
   }, [data]);
