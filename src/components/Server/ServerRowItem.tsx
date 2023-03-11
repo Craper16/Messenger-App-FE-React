@@ -64,7 +64,8 @@ export default function ServerRowItem({
   deleteServerMutation,
   leaveServerMutation,
 }: props) {
-  const isUserOwner = server._id === userId;
+  const isUserOwner = server.owner === userId;
+  console.log(server.name);
 
   return (
     <div key={server._id}>

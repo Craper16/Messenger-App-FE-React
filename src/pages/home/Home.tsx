@@ -12,7 +12,14 @@ export default function Home() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { data, isFetching, isError, error } = useFetchUserServersQuery();
+  const { data, isFetching, isError, error } = useFetchUserServersQuery(
+    undefined,
+    {
+      refetchOnReconnect: true,
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   const { userId } = useAppSelector((state) => state.auth);
   const { userServers } = useAppSelector((state) => state.server);

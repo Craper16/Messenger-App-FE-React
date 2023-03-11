@@ -67,7 +67,7 @@ export const serverApi = createApi({
       query: ({ serverId, serverName }) => ({
         url: `/server/delete/${serverId}`,
         method: 'DELETE',
-        body: serverName,
+        body: { serverName },
       }),
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,

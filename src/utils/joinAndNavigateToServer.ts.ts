@@ -13,6 +13,7 @@ export const joinAndNavigateToServer = ({
   navigate,
   socket,
   joinServer,
+  toast,
 }: {
   data: { message: string; server: ServerData } | undefined;
   isSuccess: boolean;
@@ -23,11 +24,19 @@ export const joinAndNavigateToServer = ({
     { server: ServerData },
     'server/joinServer'
   >;
+  toast: any;
 }) =>
   useEffect(() => {
     if (isSuccess) {
       dispatch(joinServer({ server: data!.server }));
       navigate(SERVER_NAV(data!.server._id));
       socket.emit('join_servers', [data!.server._id]);
+      toast({
+        title: 'Success',
+        description: data?.message,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   }, [isSuccess, dispatch]);

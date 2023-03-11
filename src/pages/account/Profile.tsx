@@ -1,23 +1,8 @@
 import { useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  SimpleGrid,
-  List,
-  ListItem,
-  Menu,
-  MenuButton,
-  MenuItem,
-  Divider,
-  MenuList,
-} from '@chakra-ui/react';
+import { Button, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
-import {
-  CHANGE_PASSWORD,
-  SERVER_NAV,
-  UPDATE_USER_INFO,
-} from '../../consts/routeNames';
+import { CHANGE_PASSWORD, UPDATE_USER_INFO } from '../../consts/routeNames';
 import { useGetUserDataQuery } from '../../redux/api/authApi';
 import { setUserInfo } from '../../redux/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -30,10 +15,11 @@ import {
 } from '../../redux/api/serverApi';
 import { setUserServersAndJoinServers } from '../../utils/setUserServersAndJoinServers';
 import { leaveServer, setUserServers } from '../../redux/server/serverSlice';
-import { MdList } from 'react-icons/md';
 import ServerRowItem from '../../components/Server/ServerRowItem';
+import { leaveOrDeleteServerEffect } from '../../utils/leaveOrDeleteServerEffect';
 
 export default function Profile() {
+  const toast = useToast();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -64,20 +50,13 @@ export default function Profile() {
     ? userServers.slice(0, 5)
     : userServers;
 
-  useEffect(() => {
-    if (
-      deleteServerMutationResponse.isSuccess ||
-      leaveServerMutationResponse.isSuccess
-    ) {
-      dispatch(
-        leaveServer({
-          serverId:
-            deleteServerMutationResponse?.data?.server._id! ||
-            leaveServerMutationResponse?.data?.server._id!,
-        })
-      );
-    }
-  }, [deleteServerMutationResponse.data, leaveServerMutationResponse.data]);
+  leaveOrDeleteServerEffect({
+    dispatch,
+    leaveServer,
+    toast,
+    deleteServerMutationResponse,
+    leaveServerMutationResponse,
+  });
 
   setUserServersAndJoinServers({
     dispatch,

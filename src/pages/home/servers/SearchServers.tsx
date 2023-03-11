@@ -6,6 +6,7 @@ import {
   InputRightElement,
   Spinner,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +24,7 @@ import { joinAndNavigateToServer } from '../../../utils/joinAndNavigateToServer.
 import { searchServersAndClearSearchedServers } from '../../../utils/searchServersAndClearSearchedServers.ts';
 
 export default function SearchServers() {
+  const toast = useToast();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -49,6 +51,7 @@ export default function SearchServers() {
     joinServer,
     navigate,
     socket,
+    toast,
   });
 
   searchServersAndClearSearchedServers({
