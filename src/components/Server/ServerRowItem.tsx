@@ -65,8 +65,6 @@ export default function ServerRowItem({
   leaveServerMutation,
 }: props) {
   const isUserOwner = server.owner === userId;
-  console.log(server.name);
-
   return (
     <div key={server._id}>
       <List className="mt-12 align-middle text-center">

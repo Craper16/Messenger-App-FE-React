@@ -1,5 +1,6 @@
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
+import { Socket } from 'socket.io-client';
 import { AppDispatch } from '../redux/store';
 
 export const leaveOrDeleteServerEffect = ({
@@ -8,6 +9,7 @@ export const leaveOrDeleteServerEffect = ({
   toast,
   deleteServerMutationResponse,
   leaveServerMutationResponse,
+  socket,
 }: {
   dispatch: AppDispatch;
   leaveServer: ActionCreatorWithPayload<
@@ -19,6 +21,7 @@ export const leaveOrDeleteServerEffect = ({
   toast: any;
   deleteServerMutationResponse: any;
   leaveServerMutationResponse: any;
+  socket: Socket;
 }) =>
   useEffect(() => {
     if (
@@ -35,11 +38,16 @@ export const leaveOrDeleteServerEffect = ({
       toast({
         title: 'Success',
         description:
-          leaveServerMutationResponse.data?.message ||
-          deleteServerMutationResponse.data?.message,
+          leaveServerMutationResponse?.data?.message ||
+          deleteServerMutationResponse?.data?.message,
         status: 'success',
         duration: 5000,
         isClosable: true,
       });
+      socket.emit(
+        'leave_server',
+        deleteServerMutationResponse?.data?.server._id ||
+          leaveServerMutationResponse?.data?.server?._id
+      );
     }
   }, [deleteServerMutationResponse.data, leaveServerMutationResponse.data]);

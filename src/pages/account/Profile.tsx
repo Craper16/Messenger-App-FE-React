@@ -28,6 +28,7 @@ export default function Profile() {
   const { displayName, email, phoneNumber, userId } = useAppSelector(
     (state) => state.auth
   );
+  const socket = useAppSelector((state) => state.socket.socket);
 
   const userServersLengthBiggerThanFive = userServers.length > 5;
   const [userServersTooLong, setUserServersTooLong] = useState(() =>
@@ -56,6 +57,7 @@ export default function Profile() {
     toast,
     deleteServerMutationResponse,
     leaveServerMutationResponse,
+    socket,
   });
 
   setUserServersAndJoinServers({
@@ -86,17 +88,34 @@ export default function Profile() {
   }
 
   return (
-    <div className="ml-12 mt-12">
+    <div className="flex-col mt-12">
       <div className="ml-auto m-auto mr-auto justify-center align-middle">
-        <Text>Display Name</Text>
-        <div>{displayName}</div>
-        <div>{email}</div>
-        <div>{phoneNumber}</div>
-        <Button onClick={() => navigate(CHANGE_PASSWORD)}>
-          Change Password
-        </Button>
-        <Button onClick={() => navigate(UPDATE_USER_INFO)}>Update Info</Button>
-        <Text>Your Servers: </Text>
+        <div className="text-center font-bold text-4xl text-purple-800">
+          {displayName}
+        </div>
+        <div className="text-center font-bold text-4xl text-purple-800">
+          {email}
+        </div>
+        <div className="text-center font-bold text-4xl text-purple-800">
+          {phoneNumber}
+        </div>
+        <div className="flex align-middle m-3 justify-evenly">
+          <Button
+            colorScheme="purple"
+            onClick={() => navigate(CHANGE_PASSWORD)}
+          >
+            Change Password
+          </Button>
+          <Button
+            colorScheme="purple"
+            onClick={() => navigate(UPDATE_USER_INFO)}
+          >
+            Update Info
+          </Button>
+        </div>
+        <Text className="text-center font-bold text-4xl text-purple-800">
+          Manage Your Servers{' '}
+        </Text>
         {serversToShow.length > 0 ? (
           serversToShow.map((server) => (
             <ServerRowItem
