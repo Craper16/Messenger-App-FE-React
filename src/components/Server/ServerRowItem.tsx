@@ -193,7 +193,10 @@ export default function ServerRowItem({
         isOpen={isOpen}
         onClose={onClose}
       >
-        <ModalOverlay />
+        <ModalOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px)"
+        />
         <ModalContent>
           <ModalHeader className="text-purple-900 font-bold">
             Please enter the server name
