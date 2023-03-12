@@ -61,7 +61,7 @@ export default function Server() {
   return (
     <div>
       {isFetching && <LoadingIndicator />}
-      <div className="overflow-y-auto overflow-x-hidden h-96">
+      <div className="overflow-y-auto overflow-x-hidden h-96 bg-gradient-to-br from-violet-500 to-fuchsia-500">
         {sentAndReceivedMessages.map((message, i) => (
           <MessageItem
             userId={userId!}
