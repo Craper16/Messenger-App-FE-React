@@ -64,6 +64,7 @@ export default function Server() {
       <div className="overflow-y-auto overflow-x-hidden h-96">
         {sentAndReceivedMessages.map((message, i) => (
           <MessageItem
+            userId={userId!}
             message={message}
             messagesDivRef={messagesDivRef}
             key={i}

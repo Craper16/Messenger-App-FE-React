@@ -202,7 +202,7 @@ export default function ServerRowItem({
             Please enter the server name
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb={6}>
+          <ModalBody className="pb-6">
             <Text className="text-purple-900 font-semibold">{`Enter '${server.name}' to delete your server`}</Text>
             <Input
               value={enteredUserServerName}
@@ -211,8 +211,8 @@ export default function ServerRowItem({
           </ModalBody>
           <ModalFooter>
             <Button
+              className="mr-3"
               colorScheme="purple"
-              mr={3}
               disabled={!enteredUserServerName}
               isLoading={deleteServerMutationIsLoading}
               onClick={() => {
