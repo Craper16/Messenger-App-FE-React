@@ -59,9 +59,9 @@ export default function UpdateUserInfo() {
         values,
         touched,
       }) => (
-        <Form>
+        <Form className="flex flex-col mr-auto ml-auto mt-36 w-96">
           <FormControl isInvalid={!!errors.displayName && touched.displayName}>
-            <FormLabel>Display Name</FormLabel>
+            <FormLabel className="text-purple-900">Display Name</FormLabel>
             <Input
               type="text"
               value={values.displayName}
@@ -71,7 +71,7 @@ export default function UpdateUserInfo() {
             <FormErrorMessage>{errors.displayName}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.phoneNumber && touched.phoneNumber}>
-            <FormLabel>Phone Number</FormLabel>
+            <FormLabel className="text-purple-900">Phone Number</FormLabel>
             <Input
               type="number"
               value={values.phoneNumber}
@@ -81,6 +81,8 @@ export default function UpdateUserInfo() {
             <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
           </FormControl>
           <Button
+            className="mt-5"
+            colorScheme="purple"
             isLoading={isLoading}
             disabled={isLoading || !isValid}
             onClick={() => handleSubmit()}

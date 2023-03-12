@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -11,6 +11,15 @@ import {
   Divider,
   MenuList,
   Text,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Input,
 } from '@chakra-ui/react';
 import { ServerData } from '../../redux/server/serverSlice';
 import { MdList } from 'react-icons/md';
@@ -23,6 +32,10 @@ import {
   FetchBaseQueryError,
   MutationDefinition,
 } from '@reduxjs/toolkit/dist/query';
+import { modalClearInputOnClose } from '../../utils/modalClearInputOnClose';
+import { SerializedError } from '@reduxjs/toolkit';
+import ErrorMessage from '../ErrorMessage';
+import { leaveServerIsErrorEffect } from '../../utils/leaveServerIsErrorEffect';
 
 type props = {
   server: ServerData;
@@ -55,6 +68,12 @@ type props = {
       'serverApi'
     >
   >;
+  deleteServerMutationIsLoading: boolean;
+  deleteServerMutationIsError: boolean;
+  leaveServerMutationIsError: boolean;
+  deleteServerMutationError: FetchBaseQueryError | SerializedError | undefined;
+  leaveServerMutationError: FetchBaseQueryError | SerializedError | undefined;
+  toast: any;
 };
 
 export default function ServerRowItem({
@@ -63,8 +82,28 @@ export default function ServerRowItem({
   navigate,
   deleteServerMutation,
   leaveServerMutation,
+  deleteServerMutationIsLoading,
+  deleteServerMutationError,
+  leaveServerMutationError,
+  deleteServerMutationIsError,
+  leaveServerMutationIsError,
+  toast,
 }: props) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const isUserOwner = server.owner === userId;
+
+  const [enteredUserServerName, setEnteredUserServerName] = useState('');
+
+  modalClearInputOnClose({ isOpen, setEnteredUserServerName });
+
+  leaveServerIsErrorEffect({
+    leaveServerMutationError,
+    leaveServerMutationIsError,
+    deleteServerMutationError,
+    deleteServerMutationIsError,
+    toast,
+  });
+
   return (
     <div key={server._id}>
       <List className="mt-12 align-middle text-center">
@@ -133,11 +172,7 @@ export default function ServerRowItem({
                   <MenuItem
                     onClick={
                       isUserOwner
-                        ? () =>
-                            deleteServerMutation({
-                              serverId: server._id,
-                              serverName: server.name,
-                            })
+                        ? () => onOpen()
                         : () => leaveServerMutation(server._id)
                     }
                   >
@@ -153,6 +188,50 @@ export default function ServerRowItem({
           <Divider />
         </ListItem>
       </List>
+      <Modal
+        closeOnOverlayClick={true}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader className="text-purple-900 font-bold">
+            Please enter the server name
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <Text className="text-purple-900 font-semibold">{`Enter '${server.name}' to delete your server`}</Text>
+            <Input
+              value={enteredUserServerName}
+              onChange={(e) => setEnteredUserServerName(e.currentTarget.value)}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="purple"
+              mr={3}
+              disabled={!enteredUserServerName}
+              isLoading={deleteServerMutationIsLoading}
+              onClick={() => {
+                if (!enteredUserServerName) return;
+                return deleteServerMutation({
+                  serverId: server._id,
+                  serverName: enteredUserServerName,
+                });
+              }}
+            >
+              Confirm
+            </Button>
+            <Button
+              color="purple.900"
+              variant="unstyled"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

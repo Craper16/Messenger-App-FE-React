@@ -90,15 +90,15 @@ export default function Profile() {
   return (
     <div className="flex-col mt-12">
       <div className="ml-auto m-auto mr-auto justify-center align-middle">
-        <div className="text-center font-bold text-4xl text-purple-800">
+        <Text className="text-center font-bold text-4xl text-purple-800">
           {displayName}
-        </div>
-        <div className="text-center font-bold text-4xl text-purple-800">
+        </Text>
+        <Text className="text-center font-bold text-4xl text-purple-800">
           {email}
-        </div>
-        <div className="text-center font-bold text-4xl text-purple-800">
+        </Text>
+        <Text className="text-center font-bold text-4xl text-purple-800">
           {phoneNumber}
-        </div>
+        </Text>
         <div className="flex align-middle m-3 justify-evenly">
           <Button
             colorScheme="purple"
@@ -125,6 +125,14 @@ export default function Profile() {
               userId={userId!}
               leaveServerMutation={leaveServerMutation}
               deleteServerMutation={deleteServerMutation}
+              deleteServerMutationIsLoading={
+                deleteServerMutationResponse.isLoading
+              }
+              deleteServerMutationError={deleteServerMutationResponse.error}
+              deleteServerMutationIsError={deleteServerMutationResponse.isError}
+              leaveServerMutationError={leaveServerMutationResponse.error}
+              leaveServerMutationIsError={leaveServerMutationResponse.isError}
+              toast={toast}
             />
           ))
         ) : (

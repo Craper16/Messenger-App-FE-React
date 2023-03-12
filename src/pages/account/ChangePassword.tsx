@@ -50,9 +50,9 @@ export default function ChangePassword() {
         isValid,
         touched,
       }) => (
-        <Form>
+        <Form className="flex flex-col mr-auto ml-auto mt-36 w-96">
           <FormControl isInvalid={!!errors.oldPassword && touched.oldPassword}>
-            <FormLabel>Old Password</FormLabel>
+            <FormLabel className="text-purple-900">Old Password</FormLabel>
             <Input
               type="password"
               value={values.oldPassword}
@@ -62,7 +62,7 @@ export default function ChangePassword() {
             <FormErrorMessage>{errors.oldPassword}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.newPassword && touched.newPassword}>
-            <FormLabel>New Password</FormLabel>
+            <FormLabel className="text-purple-900">New Password</FormLabel>
             <Input
               type="password"
               value={values.newPassword}
@@ -72,6 +72,8 @@ export default function ChangePassword() {
             <FormErrorMessage>{errors.newPassword}</FormErrorMessage>
           </FormControl>
           <Button
+            className="mt-5"
+            colorScheme="purple"
             isLoading={isLoading}
             disabled={isLoading || !isValid}
             onClick={() => handleSubmit()}
