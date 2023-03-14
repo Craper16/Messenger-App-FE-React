@@ -79,7 +79,6 @@ export default function MainNavbar({ handleLogout }: MainNavbarProps) {
           <Menu>
             <MenuButton
               as={Button}
-              rounded={'full'}
               variant={'link'}
               cursor={'pointer'}
               minW={0}

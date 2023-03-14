@@ -19,7 +19,7 @@ export default function ServerItem({
     <Card
       key={server._id}
       backgroundColor="purple.200"
-      className="col-start-auto w-48 h-48 cursor-pointer m-10"
+      className="col-start-auto w-48 h-48 cursor-pointer m-10 hover:scale-125 delay-75 duration-300"
       onClick={() => navigate(SERVER_NAV(server._id))}
     >
       <CardHeader className="font-bold text-purple-900">

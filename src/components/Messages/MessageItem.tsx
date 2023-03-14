@@ -28,8 +28,6 @@ export default function MessageItem({
     message.sender._id
   );
 
-  console.log(data);
-
   return (
     <Card
       backgroundColor={isUserTheServerOwner ? 'purple.100' : 'purple.200'}
@@ -39,7 +37,7 @@ export default function MessageItem({
     >
       <CardHeader className="flex font-bold font-sans">
         <Text
-          className="mr-3 text-lg"
+          className="mr-3 cursor-pointer text-lg hover:text-xl duration-300"
           onMouseEnter={() => setShowMoreUserInfo(true)}
           onMouseLeave={() => setShowMoreUserInfo(false)}
         >
@@ -61,7 +59,22 @@ export default function MessageItem({
           } at ${date.toISOString().split('T')[1].split('.')[0]}`}</Text>
         )}
       </CardHeader>
-      {showMoreUserInfo && <div>Hello</div>}
+      {showMoreUserInfo && (
+        <div className="absolute bg-purple-600 border rounded-md ml-60 p-8 duration-300">
+          <div className="flex">
+            <Text>Display Name: </Text>
+            <Text className="text-white uppercase">{data?.displayName}</Text>
+          </div>
+          <div className="flex">
+            <Text>Email: </Text>
+            <Text>{data?.email}</Text>
+          </div>
+          <div className="flex">
+            <Text>Phone Number</Text>
+            <Text>{data?.phoneNumber}</Text>
+          </div>
+        </div>
+      )}
       <CardBody>
         <Text className="p-3">{`${message.content}`}</Text>
       </CardBody>
