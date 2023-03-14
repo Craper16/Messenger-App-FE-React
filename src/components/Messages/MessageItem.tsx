@@ -19,18 +19,14 @@ export default function MessageItem({
 }: props) {
   const date = new Date(message.sentAt);
 
+  const isUserTheServerOwner = message.sender._id === userId;
+
   return (
     <Card
-      backgroundColor={
-        message.sender._id === userId ? 'purple.100' : 'gray.500'
-      }
+      backgroundColor={isUserTheServerOwner ? 'purple.100' : 'purple.200'}
       variant="elevated"
       ref={messagesDivRef}
-      className={
-        message.sender._id === userId
-          ? 'flex flex-col ml-9 m-5 mt-3 w-5/6'
-          : 'flex flex-col ml-9 m-5 mt-3 w-5/6'
-      }
+      className="flex flex-col ml-9 m-5 mt-3 w-5/6"
     >
       <CardHeader className="flex font-bold font-sans">
         <Text className="mr-3 text-lg">{message.sender.displayName}</Text>

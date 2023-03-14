@@ -21,7 +21,9 @@ export const leaveServerIsErrorEffect = ({
         title: 'An error has occured',
         description:
           (leaveServerMutationError as { message: string })?.message ||
-          (deleteServerMutationError as { message: string })?.message,
+          (deleteServerMutationError as { message: string })?.message ||
+          (leaveServerMutationError as { error: string }).error ||
+          (deleteServerMutationError as { error: string }).error,
         status: 'error',
         duration: 5000,
         isClosable: true,

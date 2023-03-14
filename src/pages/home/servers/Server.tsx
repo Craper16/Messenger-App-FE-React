@@ -4,8 +4,9 @@ import {
   InputGroup,
   InputRightElement,
   Spinner,
+  useToast,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   useAddMessageToServerMutation,
@@ -23,15 +24,16 @@ import { addMessagesReceived } from '../../../utils/addMessagesReceived';
 import ErrorMessage from '../../../components/ErrorMessage';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import MessageItem from '../../../components/Messages/MessageItem';
+import { messageFailedToSaveToServer } from '../../../utils/messageFailedToSave';
 
 export default function Server() {
+  const toast = useToast();
+  const { serverId } = useParams<{ serverId: string }>();
   const messagesDivRef = useRef<HTMLDivElement>(null);
   const [messageToSend, setMessageToSend] = useState('');
   const [sentAndReceivedMessages, setSentAndReceivedMessages] = useState<
     MessageDataModel[]
   >([]);
-
-  const { serverId } = useParams<{ serverId: string }>();
 
   const socket = useAppSelector((state) => state.socket.socket);
   const { userId, displayName, email, phoneNumber } = useAppSelector(
@@ -42,13 +44,20 @@ export default function Server() {
     serverId: serverId!,
   });
 
-  const [addMessageToServerMutation] = useAddMessageToServerMutation();
+  const [addMessageToServerMutation, addMessageToServerMutationResponse] =
+    useAddMessageToServerMutation();
 
   scrollToBottomOfMessages({ messagesDivRef, sentAndReceivedMessages });
 
   addMessagesFromServer({ data, setSentAndReceivedMessages });
 
   addMessagesReceived({ setSentAndReceivedMessages, socket });
+
+  messageFailedToSaveToServer({
+    addMessageToServerError: addMessageToServerMutationResponse.error,
+    addMessageToServerIsError: addMessageToServerMutationResponse.isError,
+    toast: toast,
+  });
 
   if (isError) {
     return (
@@ -59,9 +68,12 @@ export default function Server() {
   }
 
   return (
-    <div>
+    <div
+      style={{ height: '83vh' }}
+      className="flex flex-col w-full h-screen absolute overflow-hidden"
+    >
       {isFetching && <LoadingIndicator />}
-      <div className="overflow-y-auto overflow-x-hidden h-96 bg-gradient-to-br from-violet-500 to-fuchsia-500">
+      <div className="flex-grow overflow-y-auto overflow-x-hidden mb-auto md:mb-4">
         {sentAndReceivedMessages.map((message, i) => (
           <MessageItem
             userId={userId!}
@@ -71,31 +83,32 @@ export default function Server() {
           />
         ))}
       </div>
-      <InputGroup className="flex justify-center align-middle">
-        <Input
-          className="w-40"
-          value={messageToSend}
-          onChange={(e) => setMessageToSend(e.currentTarget.value)}
-        />
-        <InputRightElement
-          onClick={() =>
-            sendMessageToServer({
-              addMessageToServerMutation,
-              displayName: displayName!,
-              email: email!,
-              message: messageToSend,
-              phoneNumber: phoneNumber!,
-              serverData: data!,
-              setMessageToSend,
-              setSentAndReceivedMessages,
-              socket,
-              userId: userId!,
-            })
-          }
-          className="cursor-pointer"
-          children={<MdSend className="text-purple-900" />}
-        />
-      </InputGroup>
+      <div className="flex bottom-0 fixed w-full">
+        <InputGroup className="flex justify-center align-middle">
+          <Input
+            value={messageToSend}
+            onChange={(e) => setMessageToSend(e.currentTarget.value)}
+          />
+          <InputRightElement
+            onClick={() =>
+              sendMessageToServer({
+                addMessageToServerMutation,
+                displayName: displayName!,
+                email: email!,
+                message: messageToSend,
+                phoneNumber: phoneNumber!,
+                serverData: data!,
+                setMessageToSend,
+                setSentAndReceivedMessages,
+                socket,
+                userId: userId!,
+              })
+            }
+            className="cursor-pointer"
+            children={<MdSend className="text-purple-900" />}
+          />
+        </InputGroup>
+      </div>
     </div>
   );
 }
