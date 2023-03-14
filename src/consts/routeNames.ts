@@ -9,3 +9,6 @@ export const SEARCH_SERVERS = '/servers/search';
 export const BROWSE_SERVERS = '/servers/browse';
 export const SERVER = '/servers/:serverId';
 export const SERVER_NAV = (serverId: string) => `/servers/${serverId}`;
+export const MANAGE_SERVER = '/servers/:serverId/manage';
+export const MANAGE_SERVER_NAV = (serverId: string) =>
+  `/servers/${serverId}/manage`;

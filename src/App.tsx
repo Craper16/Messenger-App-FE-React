@@ -21,6 +21,7 @@ import {
   CREATE_SERVER,
   SEARCH_SERVERS,
   SERVER,
+  MANAGE_SERVER,
 } from './consts/routeNames';
 import { useRefreshTokensMutation } from './redux/api/authApi';
 import Error from './pages/Error';
@@ -92,6 +93,12 @@ function App() {
         />
         <Route
           path={UPDATE_USER_INFO}
+          element={
+            !access_token ? <Navigate to={SIGNIN} /> : <UpdateUserInfo />
+          }
+        />
+        <Route
+          path={MANAGE_SERVER}
           element={
             !access_token ? <Navigate to={SIGNIN} /> : <UpdateUserInfo />
           }

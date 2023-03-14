@@ -5,6 +5,7 @@ import {
   InputRightElement,
   Spinner,
   useToast,
+  Button,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
@@ -25,6 +26,8 @@ import ErrorMessage from '../../../components/ErrorMessage';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import MessageItem from '../../../components/Messages/MessageItem';
 import { messageFailedToSaveToServer } from '../../../utils/messageFailedToSave';
+import { MdSettings } from 'react-icons/md';
+import ServerHeader from '../../../components/Server/ServerHeader';
 
 export default function Server() {
   const toast = useToast();
@@ -73,6 +76,13 @@ export default function Server() {
       className="flex flex-col w-full h-screen absolute overflow-hidden"
     >
       {isFetching && <LoadingIndicator />}
+      <div className="flex flex-row justify-center m-auto h-full w-full bg-purple-900">
+        <ServerHeader
+          userId={userId!}
+          owner={data?.owner!}
+          serverName={data?.name!}
+        />
+      </div>
       <div className="flex-grow overflow-y-auto overflow-x-hidden mb-auto md:mb-4">
         {sentAndReceivedMessages.map((message, i) => (
           <MessageItem

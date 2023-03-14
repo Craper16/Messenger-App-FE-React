@@ -1,10 +1,11 @@
-import React, { RefObject } from 'react';
+import React, { RefObject, useState } from 'react';
 import { MessageDataModel } from '../../helpers/servers/sendMessageToServer';
 import { Card, CardBody, CardHeader, Text } from '@chakra-ui/react';
 import {
   messageSentToday,
   messageSentYesterday,
 } from '../../helpers/date/dateCheckers';
+import { useGetUserDataByIdQuery } from '../../redux/api/authApi';
 
 type props = {
   message: MessageDataModel;
@@ -17,9 +18,17 @@ export default function MessageItem({
   messagesDivRef,
   userId,
 }: props) {
+  const [showMoreUserInfo, setShowMoreUserInfo] = useState(false);
+
   const date = new Date(message.sentAt);
 
   const isUserTheServerOwner = message.sender._id === userId;
+
+  const { data, isFetching, isError, error } = useGetUserDataByIdQuery(
+    message.sender._id
+  );
+
+  console.log(data);
 
   return (
     <Card
@@ -29,7 +38,13 @@ export default function MessageItem({
       className="flex flex-col ml-9 m-5 mt-3 w-5/6"
     >
       <CardHeader className="flex font-bold font-sans">
-        <Text className="mr-3 text-lg">{message.sender.displayName}</Text>
+        <Text
+          className="mr-3 text-lg"
+          onMouseEnter={() => setShowMoreUserInfo(true)}
+          onMouseLeave={() => setShowMoreUserInfo(false)}
+        >
+          {data?.displayName}
+        </Text>
         {messageSentToday({ date }) && (
           <Text className="text-gray-600 font-normal text-sm mt-1.5">{`Today at ${
             date.toISOString().split('T')[1].split('.')[0]
@@ -46,6 +61,7 @@ export default function MessageItem({
           } at ${date.toISOString().split('T')[1].split('.')[0]}`}</Text>
         )}
       </CardHeader>
+      {showMoreUserInfo && <div>Hello</div>}
       <CardBody>
         <Text className="p-3">{`${message.content}`}</Text>
       </CardBody>

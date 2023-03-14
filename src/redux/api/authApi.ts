@@ -51,9 +51,10 @@ export const authApi = createApi({
       }),
     }),
     getUserData: builder.query<UserInfo, void>({
-      query: () => ({
-        url: '/auth/me',
-      }),
+      query: () => '/auth/me',
+    }),
+    getUserDataById: builder.query<UserInfo, string>({
+      query: (userId) => `/auth/users/${userId}`,
     }),
     changeUserPassword: builder.mutation<
       UpdateUserResponse,
@@ -89,4 +90,5 @@ export const {
   useGetUserDataQuery,
   useChangeUserPasswordMutation,
   useUpdateUserInfoMutation,
+  useGetUserDataByIdQuery,
 } = authApi;

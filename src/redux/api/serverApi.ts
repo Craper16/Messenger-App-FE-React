@@ -55,7 +55,7 @@ export const serverApi = createApi({
         url: '/server/update-server/',
         params: { serverId },
         method: 'PUT',
-        body: newServerName,
+        body: { newServerName: newServerName },
       }),
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,
