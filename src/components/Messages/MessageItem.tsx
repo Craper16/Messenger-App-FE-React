@@ -60,10 +60,10 @@ export default function MessageItem({
         )}
       </CardHeader>
       {showMoreUserInfo && (
-        <div className="absolute bg-purple-600 border rounded-md ml-60 p-8 duration-300">
+        <div className="absolute bg-purple-50 border rounded-md ml-60 p-8 duration-300">
           <div className="flex">
             <Text>Display Name: </Text>
-            <Text className="text-white uppercase">{data?.displayName}</Text>
+            <Text className="uppercase">{data?.displayName}</Text>
           </div>
           <div className="flex">
             <Text>Email: </Text>

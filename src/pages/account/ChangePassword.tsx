@@ -4,11 +4,9 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
-  Text,
   useToast,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useChangeUserPasswordMutation } from '../../redux/api/authApi';

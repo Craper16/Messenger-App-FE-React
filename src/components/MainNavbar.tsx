@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router';
 import { ACCESS_TOKEN } from '../consts/constants';
 import {
   BROWSE_SERVERS,
-  CREATE_SERVER,
   HOME,
   PROFILE,
   SEARCH_SERVERS,
@@ -53,11 +52,6 @@ const Links: {
     path: BROWSE_SERVERS,
     icon: <MdOpenInBrowser className="text-purple-900 text-lg" />,
   },
-  {
-    name: 'Create Server',
-    path: CREATE_SERVER,
-    icon: <MdCreate className="text-purple-900 text-lg" />,
-  },
 ];
 
 export default function MainNavbar({ handleLogout }: MainNavbarProps) {
@@ -69,7 +63,7 @@ export default function MainNavbar({ handleLogout }: MainNavbarProps) {
       <Flex className="justify-between self-center h-16">
         <HStack className="self-center mr-8 cursor-pointer">
           <Box
-            className="font-bold text-4xl text-white"
+            className="font-bold text-3xl text-white hover:scale-110 duration-300"
             onClick={() => navigate(HOME)}
           >
             Saad Messenger
@@ -82,6 +76,7 @@ export default function MainNavbar({ handleLogout }: MainNavbarProps) {
               variant={'link'}
               cursor={'pointer'}
               minW={0}
+              className="hover:scale-110 duration-300"
             >
               <GiHamburgerMenu className="text-lg text-white" />
             </MenuButton>

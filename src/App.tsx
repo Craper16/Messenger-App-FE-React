@@ -18,7 +18,6 @@ import {
   SIGNUP,
   UPDATE_USER_INFO,
   BROWSE_SERVERS,
-  CREATE_SERVER,
   SEARCH_SERVERS,
   SERVER,
   MANAGE_SERVER,
@@ -34,7 +33,6 @@ import { storeDataIfAutoLoginSuccessUseEffect } from './utils/storeDataIfAutoLog
 import UpdateUserInfo from './pages/account/UpdateUserInfo';
 import { defaultServers } from './redux/server/serverSlice';
 import { defaultSocket } from './redux/socket/socketSlice';
-import CreateServer from './pages/home/servers/CreateServer';
 import BrowseServers from './pages/home/servers/BrowseServers';
 import SearchServers from './pages/home/servers/SearchServers';
 import Server from './pages/home/servers/Server';
@@ -102,10 +100,6 @@ function App() {
           element={
             !access_token ? <Navigate to={SIGNIN} /> : <UpdateUserInfo />
           }
-        />
-        <Route
-          path={CREATE_SERVER}
-          element={!access_token ? <Navigate to={SIGNIN} /> : <CreateServer />}
         />
         <Route
           path={BROWSE_SERVERS}

@@ -4,8 +4,6 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Spinner,
-  Text,
   useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';

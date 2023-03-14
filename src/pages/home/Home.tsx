@@ -1,8 +1,9 @@
 import { Box, Button, SimpleGrid, Text } from '@chakra-ui/react';
+import { MdAdd } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import ServerItem from '../../components/Server/ServerItem';
-import { BROWSE_SERVERS, CREATE_SERVER } from '../../consts/routeNames';
+import { BROWSE_SERVERS } from '../../consts/routeNames';
 import { useFetchUserServersQuery } from '../../redux/api/serverApi';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setUserServers } from '../../redux/server/serverSlice';
@@ -40,7 +41,12 @@ export default function Home() {
 
   return (
     <>
-      <Text className="text-center">Your Servers</Text>
+      <div className="flex justify-center">
+        <Text className="text-purple-900 font-bold text-2xl">
+          Your Servers
+        </Text>
+        <MdAdd className="cursor-pointer ml-4 mt-1.5 text-2xl text-purple-900 hover:scale-110 duration-300" />
+      </div>
       {fetchingDataIsSuccessfulButNoServersFound && (
         <Box className="justify-center align-middle m-auto">
           <Text>
@@ -50,9 +56,7 @@ export default function Home() {
           <Button onClick={() => navigate(BROWSE_SERVERS)}>
             Browse Servers
           </Button>
-          <Button onClick={() => navigate(CREATE_SERVER)}>
-            Create a Server
-          </Button>
+          <Button>Create a Server</Button>
         </Box>
       )}
       <SimpleGrid

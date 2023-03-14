@@ -162,13 +162,13 @@ export default function ServerRowItem({
             <Box>
               <Menu>
                 <MenuButton
-                  className="m-3 align-middle justify-center text-center"
+                  className="m-3 align-middle justify-center"
                   as={Button}
                   rightIcon={<MdList />}
                   colorScheme="purple"
                   variant="link"
                 ></MenuButton>
-                <MenuList className="border border-gray-400">
+                <MenuList className="border border-purple-700">
                   <MenuItem
                     onClick={
                       isUserOwner

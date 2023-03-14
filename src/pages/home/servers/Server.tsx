@@ -1,13 +1,10 @@
 import {
-  Text,
   Input,
   InputGroup,
   InputRightElement,
-  Spinner,
   useToast,
-  Button,
 } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   useAddMessageToServerMutation,
@@ -26,7 +23,6 @@ import ErrorMessage from '../../../components/ErrorMessage';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import MessageItem from '../../../components/Messages/MessageItem';
 import { messageFailedToSaveToServer } from '../../../utils/messageFailedToSave';
-import { MdSettings } from 'react-icons/md';
 import ServerHeader from '../../../components/Server/ServerHeader';
 
 export default function Server() {
