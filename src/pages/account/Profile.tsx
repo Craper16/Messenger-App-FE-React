@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Button, useToast } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Button, Tooltip, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import { CHANGE_PASSWORD, UPDATE_USER_INFO } from '../../consts/routeNames';
@@ -17,6 +17,8 @@ import { setUserServersAndJoinServers } from '../../utils/setUserServersAndJoinS
 import { leaveServer, setUserServers } from '../../redux/server/serverSlice';
 import ServerRowItem from '../../components/Server/ServerRowItem';
 import { leaveOrDeleteServerEffect } from '../../utils/leaveOrDeleteServerEffect';
+import { MoreInfoTooltip } from '../../components/MoreInfo';
+import { MdInfo } from 'react-icons/md';
 
 export default function Profile() {
   const toast = useToast();
@@ -109,7 +111,7 @@ export default function Profile() {
           </Button>
         </div>
         <Text className="text-center font-bold text-4xl text-purple-800">
-          Manage Your Servers{' '}
+          Manage Your Servers
         </Text>
         {serversToShow.length > 0 ? (
           serversToShow.map((server) => (
@@ -131,7 +133,18 @@ export default function Profile() {
             />
           ))
         ) : (
-          <Text>You have no servers joined</Text>
+          <div className="flex flex-row mt-6 m-auto justify-center relative">
+            <MoreInfoTooltip
+              placement="top"
+              toolTipHasArrow={false}
+              toolTipLabel="Create or Join Servers"
+            >
+              <MdInfo className="text-purple-900 mr-2" />
+            </MoreInfoTooltip>
+            <Text className="font-bold text-xl text-purple-800">
+              You have no servers joined
+            </Text>
+          </div>
         )}
         {userServersLengthBiggerThanFive && (
           <Button

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { forwardRef, Tag } from '@chakra-ui/react';
 import {
   Box,
   Button,
   SimpleGrid,
   Text,
+  Tooltip,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -23,6 +24,8 @@ import { Formik } from 'formik';
 import { createServerValidations } from '../../validations/server/serverValidations';
 import { joinAndNavigateToServer } from '../../utils/joinAndNavigateToServer.ts';
 import ServerCreateOrDeleteModal from '../../components/Server/ServerCreateOrDeleteModal';
+import LoadingIndicator from '../../components/LoadingIndicator';
+import { MoreInfoTooltip } from '../../components/MoreInfo';
 
 export default function Home() {
   const toast = useToast();
@@ -37,7 +40,6 @@ export default function Home() {
     undefined,
     {
       refetchOnReconnect: true,
-      refetchOnFocus: true,
       refetchOnMountOrArgChange: true,
     }
   );
@@ -109,10 +111,15 @@ export default function Home() {
       </Formik>
       <div className="flex justify-center">
         <Text className="text-purple-900 font-bold text-2xl">Your Servers</Text>
-        <MdAdd
-          className="cursor-pointer ml-4 mt-1.5 text-2xl text-purple-900 hover:scale-110 duration-300"
-          onClick={onOpen}
-        />
+        <MoreInfoTooltip
+          toolTipHasArrow={true}
+          toolTipLabel="Create Server"
+        >
+          <MdAdd
+            className="cursor-pointer mt-1.5 text-2xl text-purple-900 hover:scale-110 duration-300"
+            onClick={onOpen}
+          />
+        </MoreInfoTooltip>
       </div>
       {fetchingDataIsSuccessfulButNoServersFound && (
         <Box className="justify-center align-middle m-auto">
@@ -126,19 +133,23 @@ export default function Home() {
           <Button>Create a Server</Button>
         </Box>
       )}
-      <SimpleGrid
-        columnGap={25}
-        columns={4}
-      >
-        {userServers.map((server) => (
-          <ServerItem
-            key={server._id}
-            navigate={navigate}
-            server={server}
-            userId={userId!}
-          />
-        ))}
-      </SimpleGrid>
+      {isFetching ? (
+        <LoadingIndicator />
+      ) : (
+        <SimpleGrid
+          columnGap={25}
+          columns={4}
+        >
+          {userServers.map((server) => (
+            <ServerItem
+              key={server._id}
+              navigate={navigate}
+              server={server}
+              userId={userId!}
+            />
+          ))}
+        </SimpleGrid>
+      )}
     </>
   );
 }
