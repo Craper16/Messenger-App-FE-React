@@ -61,18 +61,9 @@ export default function MessageItem({
       </CardHeader>
       {showMoreUserInfo && (
         <div className="absolute bg-purple-50 border rounded-md ml-60 p-8 duration-300">
-          <div className="flex">
-            <Text>Display Name: </Text>
-            <Text className="uppercase">{data?.displayName}</Text>
-          </div>
-          <div className="flex">
-            <Text>Email: </Text>
-            <Text>{data?.email}</Text>
-          </div>
-          <div className="flex">
-            <Text>Phone Number</Text>
-            <Text>{data?.phoneNumber}</Text>
-          </div>
+          <Text>{`Display Name ${data?.displayName}`}</Text>
+          <Text>{`Email ${data?.email}`}</Text>
+          <Text>{`Phone Number ${data?.phoneNumber}`}</Text>
         </div>
       )}
       <CardBody>

@@ -66,13 +66,16 @@ export default function Server() {
     );
   }
 
+  if (isFetching) {
+    return <LoadingIndicator />;
+  }
+
   return (
     <div
       style={{ height: '83vh' }}
       className="flex flex-col w-full h-screen absolute overflow-hidden"
     >
-      {isFetching && <LoadingIndicator />}
-      <div className="flex flex-row justify-center m-auto h-full w-full bg-purple-900">
+      <div className="flex flex-row justify-center m-auto w-full bg-purple-900">
         <ServerHeader
           userId={userId!}
           owner={data?.owner!}

@@ -42,11 +42,6 @@ export default function Profile() {
   const [deleteServerMutation, deleteServerMutationResponse] =
     useDeleteServerMutation();
 
-  console.log(leaveServerMutationResponse.data);
-  console.log(leaveServerMutationResponse.error);
-  console.log(deleteServerMutationResponse.data);
-  console.log(deleteServerMutationResponse.error);
-
   const serversToShow = userServersTooLong
     ? userServers.slice(0, 5)
     : userServers;

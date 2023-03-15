@@ -34,7 +34,6 @@ import {
 } from '@reduxjs/toolkit/dist/query';
 import { modalClearInputOnClose } from '../../utils/modalClearInputOnClose';
 import { SerializedError } from '@reduxjs/toolkit';
-import ErrorMessage from '../ErrorMessage';
 import { leaveServerIsErrorEffect } from '../../utils/leaveServerIsErrorEffect';
 
 type props = {
@@ -201,7 +200,6 @@ export default function ServerRowItem({
           <ModalHeader className="text-purple-900 font-bold">
             Please enter the server name
           </ModalHeader>
-          <ModalCloseButton />
           <ModalBody className="pb-6">
             <Text className="text-purple-900 font-semibold">{`Enter '${server.name}' to delete your server`}</Text>
             <Input

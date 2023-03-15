@@ -9,8 +9,15 @@ export const serverApi = createApi({
   baseQuery: baseQueryWithReauth,
   keepUnusedDataFor: 0,
   endpoints: (builder) => ({
-    createServer: builder.mutation<ServerData, string>({
-      query: (body) => ({ url: '/server/create-server', method: 'POST', body }),
+    createServer: builder.mutation<
+      { message: string; server: ServerData },
+      string
+    >({
+      query: (body) => ({
+        url: '/server/create-server',
+        method: 'POST',
+        body: { name: body },
+      }),
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,
     }),
