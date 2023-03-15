@@ -9,7 +9,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import ServerItem from '../../components/Server/ServerItem';
 import { BROWSE_SERVERS } from '../../consts/routeNames';
@@ -122,16 +122,25 @@ export default function Home() {
         </MoreInfoTooltip>
       </div>
       {fetchingDataIsSuccessfulButNoServersFound && (
-        <Box className="justify-center align-middle m-auto">
-          <Text>
-            You dont have any servers joined, join or create a server to start
-            the fun
+        <div className="flex justify-center align-middle m-auto mt-4">
+          <Text className="text-2xl">
+            You dont have any servers joined,
+            <span
+              className="cursor-pointer text-purple-800 hover:text-gray-500"
+              onClick={() => navigate(BROWSE_SERVERS)}
+            >
+              {` join`}
+            </span>
+            {` or `}
+            <span
+              className="text-purple-800 cursor-pointer hover:text-gray-500"
+              onClick={onOpen}
+            >
+              create
+            </span>{' '}
+            a server to start the fun
           </Text>
-          <Button onClick={() => navigate(BROWSE_SERVERS)}>
-            Browse Servers
-          </Button>
-          <Button>Create a Server</Button>
-        </Box>
+        </div>
       )}
       {isFetching ? (
         <LoadingIndicator />
