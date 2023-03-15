@@ -19,7 +19,6 @@ import {
 } from '../consts/routeNames';
 import {
   MdAccountCircle,
-  MdCreate,
   MdLogout,
   MdOpenInBrowser,
   MdSearch,

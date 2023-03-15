@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Spinner, Text, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import ServerSearchItem from '../../../components/Server/ServerSearchItem';
 import {
   useFetchAllServersQuery,

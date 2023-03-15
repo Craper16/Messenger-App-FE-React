@@ -5,13 +5,6 @@ import {
   SimpleGrid,
   Text,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Input,
   useToast,
 } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
@@ -29,6 +22,7 @@ import { setUserServersAndJoinServers } from '../../utils/setUserServersAndJoinS
 import { Formik } from 'formik';
 import { createServerValidations } from '../../validations/server/serverValidations';
 import { joinAndNavigateToServer } from '../../utils/joinAndNavigateToServer.ts';
+import ServerCreateOrDeleteModal from '../../components/Server/ServerCreateOrDeleteModal';
 
 export default function Home() {
   const toast = useToast();
@@ -96,60 +90,21 @@ export default function Home() {
           touched,
           values,
         }) => (
-          <Modal
-            closeOnOverlayClick={true}
+          <ServerCreateOrDeleteModal
+            errors={errors}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            handleReset={handleReset}
             isOpen={isOpen}
-            onClose={() => {
-              onClose();
-              handleReset();
-            }}
-          >
-            <ModalOverlay
-              bg="blackAlpha.300"
-              backdropFilter="blur(10px)"
-            />
-            <ModalContent>
-              <ModalHeader className="text-purple-900 font-bold text-center">
-                Create Server
-              </ModalHeader>
-              <ModalBody className="pb-6">
-                <Text className="text-purple-900 font-semibold">
-                  Server Name
-                </Text>
-                <Input
-                  type="text"
-                  placeholder="Server Name"
-                  value={values.name}
-                  onChange={handleChange('name')}
-                  onBlur={handleBlur('name')}
-                />
-                {touched.name && errors.name && (
-                  <Text className="text-s text-red-400">{errors.name}</Text>
-                )}
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  type="submit"
-                  className="mr-3"
-                  colorScheme="purple"
-                  disabled={!isValid}
-                  onClick={() => handleSubmit()}
-                >
-                  Confirm
-                </Button>
-                <Button
-                  color="purple.900"
-                  variant="unstyled"
-                  onClick={() => {
-                    handleReset();
-                    onClose();
-                  }}
-                >
-                  Cancel
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
+            isValid={isValid}
+            name={values.name}
+            onClose={onClose}
+            touched={touched}
+            mutationIsLoading={createServerMutationResponse.isLoading}
+            headerText="Create Server"
+            bodyText="Enter your server name"
+          />
         )}
       </Formik>
       <div className="flex justify-center">

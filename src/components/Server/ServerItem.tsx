@@ -1,5 +1,4 @@
 import { Card, CardBody, CardHeader, Text } from '@chakra-ui/react';
-import React from 'react';
 import { NavigateFunction } from 'react-router';
 import { SERVER_NAV } from '../../consts/routeNames';
 import { ServerData } from '../../redux/server/serverSlice';

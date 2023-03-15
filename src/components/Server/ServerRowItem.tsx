@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -12,14 +11,6 @@ import {
   MenuList,
   Text,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Input,
 } from '@chakra-ui/react';
 import { ServerData } from '../../redux/server/serverSlice';
 import { MdList } from 'react-icons/md';
@@ -32,9 +23,11 @@ import {
   FetchBaseQueryError,
   MutationDefinition,
 } from '@reduxjs/toolkit/dist/query';
-import { modalClearInputOnClose } from '../../utils/modalClearInputOnClose';
 import { SerializedError } from '@reduxjs/toolkit';
 import { leaveServerIsErrorEffect } from '../../utils/leaveServerIsErrorEffect';
+import { Formik } from 'formik';
+import ServerCreateOrDeleteModal from './ServerCreateOrDeleteModal';
+import { deleteServerValidations } from '../../validations/server/serverValidations';
 
 type props = {
   server: ServerData;
@@ -90,10 +83,6 @@ export default function ServerRowItem({
 }: props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isUserOwner = server.owner === userId;
-
-  const [enteredUserServerName, setEnteredUserServerName] = useState('');
-
-  modalClearInputOnClose({ isOpen, setEnteredUserServerName });
 
   leaveServerIsErrorEffect({
     leaveServerMutationError,
@@ -187,52 +176,44 @@ export default function ServerRowItem({
           <Divider />
         </ListItem>
       </List>
-      <Modal
-        closeOnOverlayClick={true}
-        isOpen={isOpen}
-        onClose={onClose}
+      <Formik
+        initialValues={{ name: '' }}
+        validateOnMount={true}
+        onSubmit={(values) =>
+          deleteServerMutation({
+            serverId: server._id,
+            serverName: values.name,
+          })
+        }
+        validationSchema={deleteServerValidations}
       >
-        <ModalOverlay
-          bg="blackAlpha.300"
-          backdropFilter="blur(10px)"
-        />
-        <ModalContent>
-          <ModalHeader className="text-purple-900 font-bold">
-            Please enter the server name
-          </ModalHeader>
-          <ModalBody className="pb-6">
-            <Text className="text-purple-900 font-semibold">{`Enter '${server.name}' to delete your server`}</Text>
-            <Input
-              value={enteredUserServerName}
-              onChange={(e) => setEnteredUserServerName(e.currentTarget.value)}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              className="mr-3"
-              colorScheme="purple"
-              disabled={!enteredUserServerName}
-              isLoading={deleteServerMutationIsLoading}
-              onClick={() => {
-                if (!enteredUserServerName) return;
-                return deleteServerMutation({
-                  serverId: server._id,
-                  serverName: enteredUserServerName,
-                });
-              }}
-            >
-              Confirm
-            </Button>
-            <Button
-              color="purple.900"
-              variant="unstyled"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        {({
+          handleBlur,
+          handleChange,
+          handleReset,
+          handleSubmit,
+          values,
+          isValid,
+          touched,
+          errors,
+        }) => (
+          <ServerCreateOrDeleteModal
+            errors={errors}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            handleReset={handleReset}
+            handleSubmit={handleSubmit}
+            isValid={isValid}
+            isOpen={isOpen}
+            name={values.name}
+            onClose={onClose}
+            touched={touched}
+            mutationIsLoading={deleteServerMutationIsLoading}
+            headerText="Delete Server"
+            bodyText={`Enter '${server.name}' to delete your server`}
+          />
+        )}
+      </Formik>
     </div>
   );
 }
