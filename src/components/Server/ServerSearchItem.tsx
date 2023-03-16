@@ -47,7 +47,8 @@ export default function ServerSearchItem({
     >
       <Card
         key={server._id}
-        className="col-start-auto w-48 h-56 cursor-pointer bg-red-400"
+        backgroundColor="purple.200"
+        className="col-start-auto w-72 h-56 cursor-pointer bg-red-400"
         onClick={() => {
           if (server.members.find((member) => member === userId)) {
             return navigate(SERVER_NAV(server._id));
@@ -56,13 +57,14 @@ export default function ServerSearchItem({
         }}
       >
         <CardHeader className="font-bold">{server.name}</CardHeader>
-        <CardBody className="justify-center align-middle m-auto">
+        <CardBody>
           <Text>Members: {server.members.length}</Text>
           {server.owner === userId && <Text>Owner</Text>}
           {server.members.find((member) => member === userId) ? (
             <Text>You are already a member of this server</Text>
           ) : (
             <Button
+              className="mt-3"
               onClick={() => joinServerMutation({ serverId: server._id })}
             >
               {`Join ${server.name}`}
