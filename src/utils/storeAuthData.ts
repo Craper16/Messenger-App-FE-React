@@ -32,7 +32,7 @@ export const storeAuthDataOnSuccessfulAuthUseEffect = ({
   useEffect(() => {
     if (isSuccess) {
       const socket = connect(import.meta.env.VITE_API_KEY, {
-        query: { access_token: data?.access_token! },
+        query: { access_token: data?.access_token!, userId: data?.userId },
       });
       storeAuthData(dispatch, setUser, data!);
       store.dispatch(setSocket(socket));

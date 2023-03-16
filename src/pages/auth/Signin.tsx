@@ -23,6 +23,8 @@ export default function Signin() {
   const [signInUser, { data, isLoading, isSuccess, error, isError }] =
     useSignInUserMutation();
 
+  console.log(data);
+
   storeAuthDataOnSuccessfulAuthUseEffect({
     data,
     dispatch,

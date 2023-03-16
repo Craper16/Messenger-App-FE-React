@@ -51,7 +51,7 @@ export const storeDataIfAutoLoginSuccessUseEffect = ({
   useEffect(() => {
     if (isSuccess) {
       const socket = connect(import.meta.env.VITE_API_KEY, {
-        query: { access_token: data?.access_token! },
+        query: { access_token: data?.access_token!, userId: data?.userId },
       });
       storeDataIfAutoLoginSuccess(dispatch, setUser, data!);
       store.dispatch(setSocket(socket));
