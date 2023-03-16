@@ -104,14 +104,14 @@ export const serverApi = createApi({
     kickFromServer: builder.mutation<
       {
         message: string;
-        kickedUser: string;
+        kickedUser: { _id: string };
         server: ServerData;
       },
       { serverId: string; kickedUserId: string }
     >({
       query: ({ kickedUserId, serverId }) => ({
-        url: '/server/kick/',
-        params: { serverId },
+        url: `/server/kick/${serverId}`,
+        method: 'PUT',
         body: { kickedUserId },
       }),
       transformErrorResponse: (response) =>

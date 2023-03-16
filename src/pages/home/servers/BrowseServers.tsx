@@ -85,8 +85,8 @@ export default function BrowseServers() {
         ))}
         {isFetching && <LoadingIndicator />}
         {data?.length === 0 && (
-          <Text className="text-center text-purple-900 font-bold mt-15 text-xl">
-            No more servers to fetch
+          <Text className="text-center text-purple-900 font-bold text-lg">
+            You have reached the end of the servers list
           </Text>
         )}
       </div>
