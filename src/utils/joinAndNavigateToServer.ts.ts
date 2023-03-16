@@ -1,4 +1,5 @@
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { ActionCreatorWithPayload, SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { useEffect } from 'react';
 import { NavigateFunction } from 'react-router';
 import { Socket } from 'socket.io-client';
@@ -14,6 +15,8 @@ export const joinAndNavigateToServer = ({
   socket,
   joinServer,
   toast,
+  isError,
+  error,
 }: {
   data: { message: string; server: ServerData } | undefined;
   isSuccess: boolean;
@@ -25,6 +28,8 @@ export const joinAndNavigateToServer = ({
     'server/joinServer'
   >;
   toast: any;
+  isError: boolean;
+  error: FetchBaseQueryError | SerializedError | undefined;
 }) =>
   useEffect(() => {
     if (isSuccess) {
@@ -39,4 +44,13 @@ export const joinAndNavigateToServer = ({
         isClosable: true,
       });
     }
-  }, [isSuccess, dispatch]);
+    if (isError) {
+      toast({
+        title: 'An error has occured',
+        description: (error as { message: string; status: number })?.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [isSuccess, dispatch, isError]);

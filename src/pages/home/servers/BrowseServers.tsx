@@ -48,6 +48,8 @@ export default function BrowseServers() {
     navigate,
     socket,
     toast,
+    error: joinServerMutationReturnObj.error,
+    isError: joinServerMutationReturnObj.isError,
   });
 
   browseServersEffect({ data, setFetchedServers, setIsScrollEnd });
