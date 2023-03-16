@@ -36,6 +36,7 @@ import { defaultSocket } from './redux/socket/socketSlice';
 import BrowseServers from './pages/home/servers/BrowseServers';
 import SearchServers from './pages/home/servers/SearchServers';
 import Server from './pages/home/servers/Server';
+import ManageServer from './pages/home/servers/ManageServer';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -97,9 +98,7 @@ function App() {
         />
         <Route
           path={MANAGE_SERVER}
-          element={
-            !access_token ? <Navigate to={SIGNIN} /> : <UpdateUserInfo />
-          }
+          element={!access_token ? <Navigate to={SIGNIN} /> : <ManageServer />}
         />
         <Route
           path={BROWSE_SERVERS}

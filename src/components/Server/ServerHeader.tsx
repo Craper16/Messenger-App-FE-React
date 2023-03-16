@@ -6,10 +6,12 @@ export default function ServerHeader({
   owner,
   serverName,
   userId,
+  handleNavigateToManageServer,
 }: {
   owner: string;
   userId: string;
   serverName: string;
+  handleNavigateToManageServer: () => void;
 }) {
   return (
     <>
@@ -18,6 +20,7 @@ export default function ServerHeader({
         <Button
           className="ml-56 text-purple-900"
           leftIcon={<MdSettings />}
+          onClick={handleNavigateToManageServer}
         >
           Manage Server
         </Button>

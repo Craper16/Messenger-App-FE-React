@@ -5,7 +5,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   useAddMessageToServerMutation,
   useFetchServerDataQuery,
@@ -24,8 +24,10 @@ import LoadingIndicator from '../../../components/LoadingIndicator';
 import MessageItem from '../../../components/Messages/MessageItem';
 import { messageFailedToSaveToServer } from '../../../utils/messageFailedToSave';
 import ServerHeader from '../../../components/Server/ServerHeader';
+import { MANAGE_SERVER_NAV } from '../../../consts/routeNames';
 
 export default function Server() {
+  const navigate = useNavigate();
   const toast = useToast();
   const { serverId } = useParams<{ serverId: string }>();
   const messagesDivRef = useRef<HTMLDivElement>(null);
@@ -45,6 +47,10 @@ export default function Server() {
 
   const [addMessageToServerMutation, addMessageToServerMutationResponse] =
     useAddMessageToServerMutation();
+
+  function handleNavigateToManageServer({ serverId }: { serverId: string }) {
+    return navigate(MANAGE_SERVER_NAV(serverId));
+  }
 
   scrollToBottomOfMessages({ messagesDivRef, sentAndReceivedMessages });
 
@@ -80,6 +86,9 @@ export default function Server() {
           userId={userId!}
           owner={data?.owner!}
           serverName={data?.name!}
+          handleNavigateToManageServer={() =>
+            handleNavigateToManageServer({ serverId: data?._id! })
+          }
         />
       </div>
       <div className="flex-grow overflow-y-auto overflow-x-hidden mb-auto md:mb-4">
