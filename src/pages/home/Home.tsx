@@ -64,6 +64,8 @@ export default function Home() {
     navigate,
     socket,
     toast,
+    error: createServerMutationResponse.error,
+    isError: createServerMutationResponse.isError,
   });
 
   if (isError) {

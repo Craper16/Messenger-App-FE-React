@@ -50,6 +50,8 @@ export default function SearchServers() {
     navigate,
     socket,
     toast,
+    error: joinServerMutationReturnObj.error,
+    isError: joinServerMutationReturnObj.isError,
   });
 
   searchServersAndClearSearchedServers({

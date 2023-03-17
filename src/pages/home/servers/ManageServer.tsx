@@ -1,5 +1,5 @@
-import { Text, useToast } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useState } from 'react';
+import { Input, Text, useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import ErrorMessage from '../../../components/ErrorMessage';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -10,8 +10,10 @@ import {
 } from '../../../redux/api/serverApi';
 import { useAppSelector } from '../../../redux/hooks';
 import { kickUserFromServerEffect } from '../../../utils/kickUserFromServerEffect';
+import { Formik } from 'formik';
 
 export default function ManageServer() {
+  const [isInUpdateServerMode, setIsInUpdateServerMode] = useState(false);
   const toast = useToast();
   const { serverId } = useParams<{ serverId: string }>();
 
@@ -24,8 +26,6 @@ export default function ManageServer() {
   );
 
   const [kickMember, kickMemberResponse] = useKickFromServerMutation();
-
-  console.log(kickMemberResponse.data);
 
   kickUserFromServerEffect({
     kickMemberIsSuccess: kickMemberResponse.isSuccess,
@@ -51,9 +51,18 @@ export default function ManageServer() {
 
   return (
     <div>
-      <Text className="text-center font-bold text-purple-900 text-3xl">
-        {data?.name}
-      </Text>
+      {isInUpdateServerMode ? (
+        <Formik
+          initialValues={{ newServerName: data?.name }}
+          onSubmit={() => {}}
+        >
+          {({}) => <Input />}
+        </Formik>
+      ) : (
+        <Text className="text-center font-bold text-purple-900 text-3xl">
+          {data?.name}
+        </Text>
+      )}
       <Text className="text-center font-bold text-purple-900 text-3xl">
         Members
       </Text>
