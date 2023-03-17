@@ -34,6 +34,8 @@ import Server from './pages/home/servers/Server';
 import ManageServer from './pages/home/servers/ManageServer';
 import { useToast } from '@chakra-ui/react';
 import { kickedUserIsLoggedIn } from './utils/kickedUserIsLoggedIn';
+import { receivedMessageNotification } from './utils/receivedMessageNotification';
+import { MdMessage } from 'react-icons/md';
 
 export interface kickedUserDataReceived {
   serverId: string;
@@ -49,6 +51,8 @@ const App = () => {
 
   const [refreshTokens, { data, isLoading, isSuccess, isError }] =
     useRefreshTokensMutation();
+
+  receivedMessageNotification({ socket, toast, toastIcon: <MdMessage /> });
 
   kickedUserIsLoggedIn({
     dispatch,

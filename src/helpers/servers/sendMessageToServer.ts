@@ -19,6 +19,7 @@ export interface MessageDataModel {
   };
   sentAt: Date;
   serverId: string;
+  serverName: string;
 }
 
 export async function sendMessageToServer({
@@ -64,6 +65,7 @@ export async function sendMessageToServer({
     },
     sentAt: new Date(),
     serverId: serverData._id!,
+    serverName: serverData.name,
   };
 
   await (socket as Socket).emit('send_message', messageData);
