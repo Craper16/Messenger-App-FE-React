@@ -7,6 +7,7 @@ import {
 } from '@reduxjs/toolkit/dist/query';
 import { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate';
 import { useEffect } from 'react';
+import { Socket } from 'socket.io-client';
 import { ServerData } from '../redux/server/serverSlice';
 
 export const kickUserFromServerEffect = ({
@@ -16,6 +17,7 @@ export const kickUserFromServerEffect = ({
   toast,
   data,
   error,
+  socket,
 }: {
   kickMemberIsSuccess: boolean;
   kickMemberIsError: boolean;
@@ -39,6 +41,7 @@ export const kickUserFromServerEffect = ({
       }
     | undefined;
   error: FetchBaseQueryError | SerializedError | undefined;
+  socket: Socket;
 }) =>
   useEffect(() => {
     if (kickMemberIsSuccess) {
@@ -49,6 +52,11 @@ export const kickUserFromServerEffect = ({
         status: 'success',
         duration: 5000,
         isClosable: true,
+      });
+      socket.emit('kick_from_server', {
+        serverId: data?.server._id,
+        kickedUserId: data?.kickedUser._id,
+        serverName: data?.server.name,
       });
     }
     if (kickMemberIsError) {

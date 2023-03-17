@@ -8,11 +8,14 @@ import {
   useFetchServerDataQuery,
   useKickFromServerMutation,
 } from '../../../redux/api/serverApi';
+import { useAppSelector } from '../../../redux/hooks';
 import { kickUserFromServerEffect } from '../../../utils/kickUserFromServerEffect';
 
 export default function ManageServer() {
   const toast = useToast();
   const { serverId } = useParams<{ serverId: string }>();
+
+  const socket = useAppSelector((state) => state.socket.socket);
 
   const { data, error, isError, isFetching, refetch } = useFetchServerDataQuery(
     {
@@ -22,6 +25,8 @@ export default function ManageServer() {
 
   const [kickMember, kickMemberResponse] = useKickFromServerMutation();
 
+  console.log(kickMemberResponse.data);
+
   kickUserFromServerEffect({
     kickMemberIsSuccess: kickMemberResponse.isSuccess,
     kickMemberIsError: kickMemberResponse.isError,
@@ -29,6 +34,7 @@ export default function ManageServer() {
     error: kickMemberResponse.error,
     refetch,
     toast,
+    socket,
   });
 
   if (isError) {

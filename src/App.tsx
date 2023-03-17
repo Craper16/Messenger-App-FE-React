@@ -1,11 +1,6 @@
 import MainNavbar from './components/MainNavbar';
 import Signin from './pages/auth/Signin';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { defaultAuth, setUser } from './redux/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import Home from './pages/home/Home';
@@ -31,19 +26,38 @@ import { handleLogout } from './utils/handleLogout';
 import { tryAutoLoginUseEffect } from './utils/tryAutoLogin';
 import { storeDataIfAutoLoginSuccessUseEffect } from './utils/storeDataIfAutoLoginSuccess';
 import UpdateUserInfo from './pages/account/UpdateUserInfo';
-import { defaultServers } from './redux/server/serverSlice';
+import { defaultServers, leaveServer } from './redux/server/serverSlice';
 import { defaultSocket } from './redux/socket/socketSlice';
 import BrowseServers from './pages/home/servers/BrowseServers';
 import SearchServers from './pages/home/servers/SearchServers';
 import Server from './pages/home/servers/Server';
 import ManageServer from './pages/home/servers/ManageServer';
+import { useToast } from '@chakra-ui/react';
+import { kickedUserIsLoggedIn } from './utils/kickedUserIsLoggedIn';
 
-function App() {
+export interface kickedUserDataReceived {
+  serverId: string;
+  userId: string;
+}
+
+const App = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const access_token = useAppSelector((state) => !!state.auth.access_token);
+  const toast = useToast();
+  const { access_token, userId } = useAppSelector((state) => state.auth);
+  const socket = useAppSelector((state) => state.socket.socket);
 
   const [refreshTokens, { data, isLoading, isSuccess, isError }] =
     useRefreshTokensMutation();
+
+  kickedUserIsLoggedIn({
+    dispatch,
+    leaveServer,
+    navigate,
+    socket,
+    toast,
+    userId,
+  });
 
   tryAutoLoginUseEffect(refreshTokens);
 
@@ -64,7 +78,7 @@ function App() {
   }
 
   return (
-    <Router>
+    <>
       <MainNavbar
         handleLogout={() =>
           handleLogout({
@@ -125,8 +139,8 @@ function App() {
           element={<Error />}
         />
       </Routes>
-    </Router>
+    </>
   );
-}
+};
 
 export default App;

@@ -1,6 +1,6 @@
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
-import { connect, Socket } from 'socket.io-client';
+import { connect } from 'socket.io-client';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../consts/constants';
 import { AuthModel } from '../redux/auth/authSlice';
 import { setSocket } from '../redux/socket/socketSlice';
