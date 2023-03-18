@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Input, Text, useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import ErrorMessage from '../../../components/ErrorMessage';
@@ -91,7 +91,7 @@ export default function ManageServer() {
             <div className="flex flex-row justify-center m-auto w-52 mt-11 relative">
               <div className="flex flex-col w-auto">
                 <Input
-                  variant="unstyled"
+                  variant="outline"
                   value={values.newServerName}
                   onChange={handleChange('newServerName')}
                   onBlur={handleBlur('newServerName')}
