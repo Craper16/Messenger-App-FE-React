@@ -9,7 +9,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import ServerItem from '../../components/Server/ServerItem';
 import { BROWSE_SERVERS } from '../../consts/routeNames';

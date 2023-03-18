@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input, Text, useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import ErrorMessage from '../../../components/ErrorMessage';
@@ -7,10 +7,14 @@ import ServerMembers from '../../../components/Server/ServerMembers';
 import {
   useFetchServerDataQuery,
   useKickFromServerMutation,
+  useUpdateServerMutation,
 } from '../../../redux/api/serverApi';
 import { useAppSelector } from '../../../redux/hooks';
 import { kickUserFromServerEffect } from '../../../utils/kickUserFromServerEffect';
 import { Formik } from 'formik';
+import { MdCheck, MdClose, MdCreate } from 'react-icons/md';
+import { updateServerValidations } from '../../../validations/server/serverValidations';
+import { updateServerInfoEffect } from '../../../utils/updateServerInfoEffect';
 
 export default function ManageServer() {
   const [isInUpdateServerMode, setIsInUpdateServerMode] = useState(false);
@@ -25,7 +29,22 @@ export default function ManageServer() {
     }
   );
 
+  const [updateServerInfoMutation, updateServerInfoMutationResponse] =
+    useUpdateServerMutation();
+
   const [kickMember, kickMemberResponse] = useKickFromServerMutation();
+
+  console.log(updateServerInfoMutationResponse.data);
+  console.log(updateServerInfoMutationResponse.error);
+
+  updateServerInfoEffect({
+    refetch,
+    setIsInUpdateServerMode,
+    toast,
+    updateErrorData: updateServerInfoMutationResponse.error,
+    updateIsError: updateServerInfoMutationResponse.isError,
+    updateIsSuccess: updateServerInfoMutationResponse.isSuccess,
+  });
 
   kickUserFromServerEffect({
     kickMemberIsSuccess: kickMemberResponse.isSuccess,
@@ -54,16 +73,68 @@ export default function ManageServer() {
       {isInUpdateServerMode ? (
         <Formik
           initialValues={{ newServerName: data?.name }}
-          onSubmit={() => {}}
+          validateOnMount={true}
+          validationSchema={updateServerValidations}
+          onSubmit={(values) =>
+            updateServerInfoMutation({
+              newServerName: values.newServerName!,
+              serverId: data?._id!,
+            })
+          }
         >
-          {({}) => <Input />}
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            errors,
+            values,
+            touched,
+            isValid,
+          }) => (
+            <div className="flex flex-row justify-center m-auto w-52 mt-11 relative">
+              <div className="flex flex-col w-auto">
+                <Input
+                  variant="unstyled"
+                  value={values.newServerName}
+                  onChange={handleChange('newServerName')}
+                  onBlur={handleBlur('newServerName')}
+                  disabled={updateServerInfoMutationResponse.isLoading}
+                />
+                {errors.newServerName && touched.newServerName && (
+                  <Text className="text-red-400 font-extralight absolute mt-9">
+                    {errors.newServerName}
+                  </Text>
+                )}
+              </div>
+              <div>
+                <MdCheck
+                  onClick={() => {
+                    if (!isValid || updateServerInfoMutationResponse.isLoading)
+                      return;
+                    handleSubmit();
+                  }}
+                  className="text-xl text-purple-900 cursor-pointer hover:scale-110"
+                />
+                <MdClose
+                  onClick={() => setIsInUpdateServerMode(false)}
+                  className="text-xl text-purple-900 cursor-pointer hover:scale-110"
+                />
+              </div>
+            </div>
+          )}
         </Formik>
       ) : (
-        <Text className="text-center font-bold text-purple-900 text-3xl">
-          {data?.name}
-        </Text>
+        <div className="flex flex-row justify-center mt-11">
+          <Text className="text-center font-bold text-purple-900 text-3xl">
+            {data?.name}
+          </Text>
+          <MdCreate
+            onClick={() => setIsInUpdateServerMode(true)}
+            className="text-xl mt-2 text-purple-900 cursor-pointer hover:scale-110"
+          />
+        </div>
       )}
-      <Text className="text-center font-bold text-purple-900 text-3xl">
+      <Text className="text-center font-bold text-purple-900 text-3xl mt-16">
         Members
       </Text>
       <div className="ml-44 justify-center">

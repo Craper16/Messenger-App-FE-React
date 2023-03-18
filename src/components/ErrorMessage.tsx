@@ -10,7 +10,7 @@ export default function ErrorMessage({ message, color }: props) {
     <div className="flex justify-center align-middle mt-6">
       <Text
         color={color ? color : 'tomato'}
-        className="font-semibold"
+        className="font-semibold animate-pulse"
       >
         {message}
       </Text>

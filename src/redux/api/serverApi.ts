@@ -59,11 +59,11 @@ export const serverApi = createApi({
       { serverId: string; newServerName: string }
     >({
       query: ({ newServerName, serverId }) => ({
-        url: '/server/update-server/',
-        params: { serverId },
+        url: `/server/update-server/${serverId}`,
         method: 'PUT',
         body: { newServerName: newServerName },
       }),
+      transformResponse: (response: { server: ServerData }) => response.server,
       transformErrorResponse: (response) =>
         (response as ErrorResponse).data.data,
     }),
