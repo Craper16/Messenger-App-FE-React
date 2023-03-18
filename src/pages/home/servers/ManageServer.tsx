@@ -34,9 +34,6 @@ export default function ManageServer() {
 
   const [kickMember, kickMemberResponse] = useKickFromServerMutation();
 
-  console.log(updateServerInfoMutationResponse.data);
-  console.log(updateServerInfoMutationResponse.error);
-
   updateServerInfoEffect({
     refetch,
     setIsInUpdateServerMode,
